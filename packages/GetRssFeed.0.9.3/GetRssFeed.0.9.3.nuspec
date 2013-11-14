@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>GetRssFeed</id>
+    <version>0.9.3</version>
+    <title>GetRssFeed</title>
+    <authors>Eric Neifert</authors>
+    <owners>Eric Neifert</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>A simple package that gets and parses an rss feed. Supports basic authenticate.</description>
+    <summary>A simple package that gets and parses an rss feed. Supports basic authenticate.</summary>
+    <releaseNotes />
+    <copyright />
+    <language />
+    <tags>rss feed reader authentication</tags>
+    <dependencies>
+      <dependency id="RestSharp" version="101.3" />
+    </dependencies>
+  </metadata>
+</package>
