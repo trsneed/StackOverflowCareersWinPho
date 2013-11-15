@@ -33,6 +33,6 @@
             <CheckBox Content="Remote" Margin="20,0,50,0" VerticalAlignment="Center"   />
             <CheckBox Content="Relocation"  VerticalAlignment="Center" />
         </StackPanel>
-        <Button Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Content="Search" />
+        <Button Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Content="Search" Click="ButtonBase_OnClick"/>
     </Grid>
 </UserControl>

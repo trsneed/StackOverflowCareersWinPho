@@ -100,7 +100,16 @@
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Model\Criteria\BaseCriteria.cs" />
+    <Compile Include="Model\Criteria\DistanceCriteria.cs" />
+    <Compile Include="Model\Criteria\DistanceUnitsCriteria.cs" />
+    <Compile Include="Model\Criteria\KeyWordCriteria.cs" />
+    <Compile Include="Model\Criteria\LocationCriteria.cs" />
+    <Compile Include="Model\Criteria\RelocationCriteria.cs" />
+    <Compile Include="Model\Criteria\RemoteCriteria.cs" />
+    <Compile Include="Model\Criteria\ISearchParameter.cs" />
     <Compile Include="Model\JobPosting.cs" />
+    <Compile Include="Model\SearchCriteria.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\AppResources.Designer.cs">

@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
+using StackOverflowCareers.Model;
 
 namespace StackOverflowCareers
 {
@@ -15,6 +16,12 @@ namespace StackOverflowCareers
         public SearchControl()
         {
             InitializeComponent();
+        }
+
+
+        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+        {
+            var criteria = new SearchCriteria();
         }
     }
 }

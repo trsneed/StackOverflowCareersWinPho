@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
@@ -14,6 +15,7 @@ namespace StackOverflowCareers
 {
     public partial class MainPage : PhoneApplicationPage
     {
+        private ProgressIndicator indicator;
         // Constructor
         public MainPage()
         {
@@ -21,7 +23,12 @@ namespace StackOverflowCareers
 
             // Set the data context of the LongListSelector control to the sample data
             DataContext = App.ViewModel;
-
+            indicator = new ProgressIndicator();
+            Binding binding = new Binding("IsLoading") { Source = DataContext };
+            Binding textBinding = new Binding("LoadingText"){Source = DataContext};
+            BindingOperations.SetBinding(
+                indicator, ProgressIndicator.IsVisibleProperty, binding);
+            BindingOperations.SetBinding(indicator, ProgressIndicator.TextProperty, textBinding);
         }
 
         // Load data for the ViewModel Items

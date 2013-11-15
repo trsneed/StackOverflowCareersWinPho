@@ -6,6 +6,7 @@ using System.IO;
 using System.Net;
 using System.ServiceModel;
 using System.ServiceModel.Syndication;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Xml;
 using Microsoft.Phone.Tasks;
@@ -66,6 +67,37 @@ namespace StackOverflowCareers.ViewModels
         {
             get;
             private set;
+        }
+
+        private bool _isLoading = false;
+
+        public bool IsLoading
+        {
+            get
+            {
+                return _isLoading;
+            }
+            set
+            {
+                _isLoading = value;
+                NotifyPropertyChanged("IsLoading");
+
+            }
+        }
+
+        private string _LoadingText;
+
+        public string LoadingText
+        {
+            get
+            {
+                return _LoadingText;
+            }
+            set
+            {
+                _LoadingText = value;
+                NotifyPropertyChanged("LoadingText");
+            }
         }
 
         /// <summary>
@@ -163,6 +195,11 @@ namespace StackOverflowCareers.ViewModels
                     return value;
                 }
             }
+        }
+
+        private async Task SearchCareers()
+        {
+            
         }
     }
 }
