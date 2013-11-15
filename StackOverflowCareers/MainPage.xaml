@@ -48,12 +48,12 @@
 
         <!--ContentPanel contains LongListSelector and LongListSelector ItemTemplate. Place additional content here-->
         <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
-            <phone:LongListSelector x:Name="JobPostings" Margin="0,0,-12,0" SelectionChanged="MainLongListSelector_SelectionChanged">
+            <phone:LongListSelector x:Name="JobPostingSelector" ItemsSource="{Binding JobPostings}" Margin="0,0,-12,0" SelectionChanged="MainLongListSelector_SelectionChanged">
                 <phone:LongListSelector.ItemTemplate>
                     <DataTemplate>
                       <StackPanel Margin="0,0,0,17">
-                          <TextBlock x:Name="Title" TextWrapping="NoWrap" Style="{StaticResource PhoneTextExtraLargeStyle}"/>
-                          <TextBlock x:Name="Summary" TextWrapping="NoWrap" Margin="12,-6,12,0" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                          <TextBlock Text="{Binding Title}" TextWrapping="NoWrap" Style="{StaticResource PhoneTextExtraLargeStyle}"/>
+                          <TextBlock Text="{Binding Summary}" TextWrapping="NoWrap" Margin="12,-6,12,0" Style="{StaticResource PhoneTextSubtleStyle}"/>
                       </StackPanel>
                     </DataTemplate>
                 </phone:LongListSelector.ItemTemplate>

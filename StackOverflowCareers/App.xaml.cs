@@ -49,10 +49,10 @@ namespace StackOverflowCareers
             InitializeComponent();
 
             // Phone-specific initialization
-            //InitializePhoneApplication();
+            InitializePhoneApplication();
 
             // Language display initialization
-            //InitializeLanguage();
+            InitializeLanguage();
 
             // Show graphics profiling information while debugging.
             if (Debugger.IsAttached)

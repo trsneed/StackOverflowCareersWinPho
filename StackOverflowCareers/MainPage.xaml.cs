@@ -39,14 +39,14 @@ namespace StackOverflowCareers
         private void MainLongListSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             // If selected item is null (no selection) do nothing
-            if (JobPostings.SelectedItem == null)
+            if (JobPostingSelector.SelectedItem == null)
                 return;
 
             // Navigate to the new page
-            NavigationService.Navigate(new Uri("/DetailsPage.xaml?selectedItem=" + (JobPostings.SelectedItem as ItemViewModel).ID, UriKind.Relative));
+            NavigationService.Navigate(new Uri("/DetailsPage.xaml?selectedItem=" + (JobPostingSelector.SelectedItem as ItemViewModel).ID, UriKind.Relative));
 
             // Reset selected item to null (no selection)
-            JobPostings.SelectedItem = null;
+            JobPostingSelector.SelectedItem = null;
         }
 
         // Sample code for building a localized ApplicationBar

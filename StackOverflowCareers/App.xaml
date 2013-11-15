@@ -9,7 +9,6 @@
     <!--Application Resources-->
     <Application.Resources>
         <local:LocalizedStrings xmlns:local="clr-namespace:StackOverflowCareers" x:Key="LocalizedStrings"/>
-        <stackOverflowCareers:Bootstrapper x:Key="bootstrapper" />
     </Application.Resources>
 
     <Application.ApplicationLifetimeObjects>

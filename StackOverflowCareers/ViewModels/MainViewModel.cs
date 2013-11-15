@@ -8,14 +8,13 @@ using System.ServiceModel;
 using System.ServiceModel.Syndication;
 using System.Windows;
 using System.Xml;
-using Caliburn.Micro;
 using Microsoft.Phone.Tasks;
 using StackOverflowCareers.Model;
 using StackOverflowCareers.Resources;
 
 namespace StackOverflowCareers.ViewModels
 {
-    public class MainViewModel : PropertyChangedBase
+    public class MainViewModel : INotifyPropertyChanged
     {
         public MainViewModel()
         {
@@ -46,7 +45,7 @@ namespace StackOverflowCareers.ViewModels
             set
             {
                 _JobPostings = value;
-                NotifyOfPropertyChange(()=> JobPostings);
+                NotifyPropertyChanged("JobPositings");
             }
         }
 
