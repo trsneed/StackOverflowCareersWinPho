@@ -8,13 +8,14 @@ using System.ServiceModel;
 using System.ServiceModel.Syndication;
 using System.Windows;
 using System.Xml;
+using Caliburn.Micro;
 using Microsoft.Phone.Tasks;
 using StackOverflowCareers.Model;
 using StackOverflowCareers.Resources;
 
 namespace StackOverflowCareers.ViewModels
 {
-    public class MainViewModel : INotifyPropertyChanged
+    public class MainViewModel : PropertyChangedBase
     {
         public MainViewModel()
         {
@@ -37,29 +38,19 @@ namespace StackOverflowCareers.ViewModels
         /// <summary>
         /// A collection for ItemViewModel objects.
         /// </summary>
+        private ObservableCollection<JobPosting> _JobPostings;
 
-        public ObservableCollection<JobPosting> JobPostings { get; private set; }
-
-        private string _sampleProperty = "Sample Runtime Property Value";
-        /// <summary>
-        /// Sample ViewModel property; this property is used in the view to display its value using a Binding
-        /// </summary>
-        /// <returns></returns>
-        public string SampleProperty
+        public ObservableCollection<JobPosting> JobPostings
         {
-            get
-            {
-                return _sampleProperty;
-            }
+            get { return _JobPostings; }
             set
             {
-                if (value != _sampleProperty)
-                {
-                    _sampleProperty = value;
-                    NotifyPropertyChanged("SampleProperty");
-                }
+                _JobPostings = value;
+                NotifyOfPropertyChange(()=> JobPostings);
             }
         }
+
+
 
         /// <summary>
         /// Sample property that returns a localized string

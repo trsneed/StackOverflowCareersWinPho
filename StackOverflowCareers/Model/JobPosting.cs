@@ -17,5 +17,6 @@ namespace StackOverflowCareers.Model
         public string Summary { get; set; }
         public string Title { get; set; }
         public List<string> Categories { get; set; }
+        public int OrderId { get; set; }
     }
 }

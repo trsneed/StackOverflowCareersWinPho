@@ -43,16 +43,16 @@ namespace StackOverflowCareers
         public App()
         {
             // Global handler for uncaught exceptions.
-            UnhandledException += Application_UnhandledException;
+            //UnhandledException += Application_UnhandledException;
 
             // Standard XAML initialization
             InitializeComponent();
 
             // Phone-specific initialization
-            InitializePhoneApplication();
+            //InitializePhoneApplication();
 
             // Language display initialization
-            InitializeLanguage();
+            //InitializeLanguage();
 
             // Show graphics profiling information while debugging.
             if (Debugger.IsAttached)
