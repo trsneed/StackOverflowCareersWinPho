@@ -9,6 +9,10 @@ namespace StackOverflowCareers.Model
 {
     public class SearchCriteria
     {
-        public IEnumerable<ISearchParameter> Criteria;
+        public SearchCriteria()
+        {
+            Criteria = new List<ISearchParameter>();
+        }
+        public List<ISearchParameter> Criteria;
     }
 }

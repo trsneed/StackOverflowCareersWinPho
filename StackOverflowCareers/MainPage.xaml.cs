@@ -16,13 +16,14 @@ namespace StackOverflowCareers
     public partial class MainPage : PhoneApplicationPage
     {
         private ProgressIndicator indicator;
+        private MainViewModel _mainViewModel;
         // Constructor
         public MainPage()
         {
             InitializeComponent();
 
             // Set the data context of the LongListSelector control to the sample data
-            DataContext = App.ViewModel;
+            DataContext = _mainViewModel = App.ViewModel;
             indicator = new ProgressIndicator();
             Binding binding = new Binding("IsLoading") { Source = DataContext };
             Binding textBinding = new Binding("LoadingText"){Source = DataContext};
@@ -52,6 +53,12 @@ namespace StackOverflowCareers
 
             // Reset selected item to null (no selection)
             JobPostingSelector.SelectedItem = null;
+        }
+
+        private void SearchClicked(object sender, EventArgs e)
+        {
+            _mainViewModel.SearchControlVisible = Visibility.Visible;
+            
         }
 
 

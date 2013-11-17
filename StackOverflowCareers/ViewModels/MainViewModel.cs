@@ -100,6 +100,18 @@ namespace StackOverflowCareers.ViewModels
             }
         }
 
+        private Visibility _SearchControlVisible = Visibility.Collapsed;
+
+        public Visibility SearchControlVisible
+        {
+            get { return _SearchControlVisible; }
+            set
+            {
+                _SearchControlVisible = value;
+                NotifyPropertyChanged("SearchControlVisible");
+            }
+        }
+
         /// <summary>
         /// Creates and adds a few ItemViewModel objects into the Items collection.
         /// </summary>

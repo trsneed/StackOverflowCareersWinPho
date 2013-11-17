@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Net;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,6 +17,7 @@ namespace StackOverflowCareers.ViewModels
         public JobPostingViewModel(JobPosting post)
         {
             JobPosting = post;
+
         }
 
 
@@ -33,6 +35,15 @@ namespace StackOverflowCareers.ViewModels
                     _jobPosting = value;
                     OnPropertyChanged("JobPosting");
                 }
+            }
+        }
+
+        public async Task ScrapThatScreen()
+        {
+            if (!string.IsNullOrWhiteSpace(_jobPosting.Id))
+            {
+                WebClient client = new WebClient();
+                var stuff = await client.DownloadStringAsync(_jobPosting.Id);
             }
         }
 
