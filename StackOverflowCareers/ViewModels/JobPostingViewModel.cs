@@ -6,6 +6,7 @@ using System.Net;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using HtmlAgilityPack;
 using StackOverflowCareers.Annotations;
 using StackOverflowCareers.Model;
 
@@ -16,8 +17,10 @@ namespace StackOverflowCareers.ViewModels
 
         public JobPostingViewModel(JobPosting post)
         {
+            if(post == null)
+                throw new ArgumentNullException("post");
             JobPosting = post;
-
+            ScrapeThatScreen();
         }
 
 
@@ -38,15 +41,27 @@ namespace StackOverflowCareers.ViewModels
             }
         }
 
-        public async Task ScrapThatScreen()
+        public void ScrapeThatScreen()
         {
             if (!string.IsNullOrWhiteSpace(_jobPosting.Id))
             {
                 WebClient client = new WebClient();
-                var stuff = await client.DownloadStringAsync(_jobPosting.Id);
+                client.DownloadStringCompleted += (sender, args) => { ProcessPostingResults(args.Result.ToString()); };
+                client.DownloadStringAsync(new Uri(_jobPosting.Id));
             }
         }
 
+
+        private void ProcessPostingResults(string result)
+        {
+            var document = new HtmlDocument();
+            document.LoadHtml(result);
+            HtmlNode body = document.DocumentNode.Descendants().FirstOrDefault(n => n.Name == "body");
+            //Let's see how this works, shall we.
+            var inner = new HtmlDocument();
+            inner.LoadHtml(body.InnerHtml);
+
+        }
         public event PropertyChangedEventHandler PropertyChanged;
 
         [NotifyPropertyChangedInvocator]

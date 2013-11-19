@@ -8,6 +8,7 @@ using System.Windows.Data;
 using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
+using StackOverflowCareers.Model;
 using StackOverflowCareers.Resources;
 using StackOverflowCareers.ViewModels;
 
@@ -49,7 +50,7 @@ namespace StackOverflowCareers
                 return;
 
             // Navigate to the new page
-            NavigationService.Navigate(new Uri("/DetailsPage.xaml?selectedItem=" + (JobPostingSelector.SelectedItem as JobPostingViewModel).JobPosting.OrderId, UriKind.Relative));
+            NavigationService.Navigate(new Uri("/DetailsPage.xaml?selectedItem=" + (JobPostingSelector.SelectedItem as JobPosting).OrderId, UriKind.Relative));
 
             // Reset selected item to null (no selection)
             JobPostingSelector.SelectedItem = null;
@@ -57,7 +58,10 @@ namespace StackOverflowCareers
 
         private void SearchClicked(object sender, EventArgs e)
         {
-            _mainViewModel.SearchControlVisible = Visibility.Visible;
+            SearchControl.Height = Application.Current.Host.Content.ActualHeight;
+            SearchControl.Width = Application.Current.Host.Content.ActualWidth;
+            _mainViewModel.IsSearchOpen = true;
+            
             
         }
 

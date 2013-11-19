@@ -50,19 +50,6 @@ namespace StackOverflowCareers.ViewModels
             }
         }
 
-
-
-        /// <summary>
-        /// Sample property that returns a localized string
-        /// </summary>
-        public string LocalizedSampleProperty
-        {
-            get
-            {
-                return AppResources.SampleProperty;
-            }
-        }
-
         public bool IsDataLoaded
         {
             get;
@@ -100,15 +87,39 @@ namespace StackOverflowCareers.ViewModels
             }
         }
 
-        private Visibility _SearchControlVisible = Visibility.Collapsed;
+        private bool _IsSearchOpen;
 
-        public Visibility SearchControlVisible
+        public bool IsSearchOpen
         {
-            get { return _SearchControlVisible; }
+            get { return _IsSearchOpen; }
             set
             {
-                _SearchControlVisible = value;
-                NotifyPropertyChanged("SearchControlVisible");
+                _IsSearchOpen = value;
+                NotifyPropertyChanged("IsSearchOpen");
+            }
+        }
+
+        private string _WhatSearchText;
+
+        public string WhatSearchText
+        {
+            get { return _WhatSearchText; }
+            set
+            {
+                _WhatSearchText = value;
+                NotifyPropertyChanged("WhatSearchText");
+            }
+        }
+
+        private string _WhereSearchText;
+
+        public string WhereSearchText
+        {
+            get { return _WhereSearchText; }
+            set
+            {
+                _WhereSearchText = value;
+                NotifyPropertyChanged("WhereSearchText");
             }
         }
 
@@ -174,7 +185,7 @@ namespace StackOverflowCareers.ViewModels
             SyndicationFeed feed = SyndicationFeed.Load(xmlReader);
 
             var uncastItems = feed.Items;
-
+            int i = 0;
             foreach (var syndicationItem in uncastItems)
             {
                 var job = new JobPosting();
@@ -182,12 +193,14 @@ namespace StackOverflowCareers.ViewModels
                 job.PublishDate = syndicationItem.PublishDate.LocalDateTime;
                 job.Summary = SanitizeString(syndicationItem.Summary.Text);
                 job.Title = syndicationItem.Title.Text;
+                job.OrderId = i;
                 foreach (var cat in syndicationItem.Categories)
                 {
                     job.Categories.Add(cat.Name);
                 }
 
                 JobPostings.Add(job);
+                i ++;
             }
         }
 

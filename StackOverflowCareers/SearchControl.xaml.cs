@@ -5,6 +5,7 @@ using System.Net;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
+using Windows.Phone.ApplicationModel;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using StackOverflowCareers.Model;
@@ -15,11 +16,10 @@ namespace StackOverflowCareers
 {
     public partial class SearchControl : UserControl
     {
-        private SearchViewModel _viewModel;
         public SearchControl()
         {
             InitializeComponent();
-            DataContext = _viewModel = new SearchViewModel();
+            DataContext = App.ViewModel;
         }
 
 
@@ -30,6 +30,12 @@ namespace StackOverflowCareers
             {
                 criteria.Criteria. Add(new LocationCriteria(txtWhere.Text));
             }
+        }
+
+        private void MySlider_ValueChanged(object sender,
+                                   RoutedPropertyChangedEventArgs<double> e)
+        {
+          //  MySlider.Value = (Math.Round(e.NewValue / 0.5) / 2.0);
         }
     }
 }
