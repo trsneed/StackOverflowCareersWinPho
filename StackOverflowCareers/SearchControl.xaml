@@ -8,10 +8,10 @@
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
     >
-    
+
     <Grid x:Name="LayoutRoot" Background="{StaticResource PhoneChromeBrush}">
-     <Grid.RowDefinitions>
-         <RowDefinition Height="Auto"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -34,5 +34,6 @@
             <CheckBox x:Name="cboxRelocation" IsChecked="{Binding IsRelocation}" Content="Relocation"  VerticalAlignment="Center" />
         </StackPanel>
         <Button Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Content="Search" Click="ButtonBase_OnClick"/>
+        <TextBlock Grid.Column="1" HorizontalAlignment="Center" Margin="0,0,0,0" Grid.Row="2" TextWrapping="Wrap" Text="{Binding Value, ElementName=MySlider}" VerticalAlignment="Bottom"/>
     </Grid>
 </UserControl>
