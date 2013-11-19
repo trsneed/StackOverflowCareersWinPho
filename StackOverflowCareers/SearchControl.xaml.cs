@@ -35,7 +35,7 @@ namespace StackOverflowCareers
         private void MySlider_ValueChanged(object sender,
                                    RoutedPropertyChangedEventArgs<double> e)
         {
-          //  MySlider.Value = (Math.Round(e.NewValue / 0.5) / 2.0);
+            ((Slider)sender).Value = Math.Round(((Slider)sender).Value/10.0) *10;
         }
     }
 }
