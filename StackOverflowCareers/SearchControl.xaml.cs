@@ -16,10 +16,11 @@ namespace StackOverflowCareers
 {
     public partial class SearchControl : UserControl
     {
+        private MainViewModel _mainViewModel;
         public SearchControl()
         {
             InitializeComponent();
-            DataContext = App.ViewModel;
+            DataContext = _mainViewModel = App.ViewModel;
         }
 
 
@@ -36,6 +37,11 @@ namespace StackOverflowCareers
                                    RoutedPropertyChangedEventArgs<double> e)
         {
             ((Slider)sender).Value = Math.Round(((Slider)sender).Value/10.0) *10;
+        }
+
+        private void LocateMe_OnClick(object sender, RoutedEventArgs e)
+        {
+            _mainViewModel.GetLocation();
         }
     }
 }

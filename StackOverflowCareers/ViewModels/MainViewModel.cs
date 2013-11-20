@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Device.Location;
 using System.IO;
 using System.Net;
 using System.ServiceModel;
@@ -10,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Xml;
 using Microsoft.Phone.Tasks;
+using StackOverflowCareers.Core;
 using StackOverflowCareers.Model;
 using StackOverflowCareers.Resources;
 
@@ -17,8 +19,13 @@ namespace StackOverflowCareers.ViewModels
 {
     public class MainViewModel : INotifyPropertyChanged
     {
+        private LocationService _locationService;
+
         public MainViewModel()
         {
+            _locationService = new LocationService(new GeoCoordinateWatcher());
+            _locationService.WatcherReadyEventHandler += WatcherReady;
+            _locationService.LocationTextEventHandler += LocationTextEventHandler;
             this.JobPostings = new ObservableCollection<JobPosting>();
 
             // WebClient is used instead of HttpWebRequest in this code sample because 
@@ -33,6 +40,16 @@ namespace StackOverflowCareers.ViewModels
             // to leave a stream open, and we will not need to worry about closing the channel. 
             webClient.DownloadStringAsync(new System.Uri("http://careers.stackoverflow.com/jobs/feed?searchTerm=austin&allowsremote=True"));
 
+        }
+
+        private void LocationTextEventHandler(object sender, string s)
+        {
+            WhereSearchText = s;
+        }
+
+        private void WatcherReady(object sender, bool b)
+        {
+            LocationServiceReady = b;
         }
 
         /// <summary>
@@ -96,6 +113,18 @@ namespace StackOverflowCareers.ViewModels
             {
                 _IsSearchOpen = value;
                 NotifyPropertyChanged("IsSearchOpen");
+            }
+        }
+
+        private bool _LocationServiceReady;
+
+        public bool LocationServiceReady
+        {
+            get { return _LocationServiceReady; }
+            set
+            {
+                _LocationServiceReady = value;
+                NotifyPropertyChanged("LocationServiceReady");
             }
         }
 
@@ -225,6 +254,14 @@ namespace StackOverflowCareers.ViewModels
         private async Task SearchCareers()
         {
             
+        }
+
+        internal void GetLocation()
+        {
+            if (_LocationServiceReady)
+            {
+                _locationService.LocateThePhone();
+            }
         }
     }
 }

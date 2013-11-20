@@ -34,6 +34,7 @@
             <CheckBox x:Name="cboxRelocation" IsChecked="{Binding IsRelocation}" Content="Relocation"  VerticalAlignment="Center" />
         </StackPanel>
         <Button Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Content="Search" Click="ButtonBase_OnClick"/>
+        <Button Grid.Row="5" Grid.Column="1" Content="location me" Click="LocateMe_OnClick"/>
         <TextBlock Grid.Column="1" HorizontalAlignment="Center" Margin="0,0,0,0" Grid.Row="2" TextWrapping="Wrap" Text="{Binding Value, ElementName=MySlider}" VerticalAlignment="Bottom"/>
     </Grid>
 </UserControl>
