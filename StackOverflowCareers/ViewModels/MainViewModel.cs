@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Device.Location;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.ServiceModel;
 using System.ServiceModel.Syndication;
@@ -22,6 +23,7 @@ namespace StackOverflowCareers.ViewModels
     public class MainViewModel : INotifyPropertyChanged
     {
         private LocationService _locationService;
+        public const string SearchUrl = "http://careers.stackoverflow.com/jobs/feed?";
 
         public MainViewModel()
         {
@@ -30,18 +32,7 @@ namespace StackOverflowCareers.ViewModels
             _locationService.LocationTextEventHandler += LocationTextEventHandler;
             this.JobPostings = new ObservableCollection<JobPosting>();
 
-            // WebClient is used instead of HttpWebRequest in this code sample because 
-            // the implementation is simpler and easier to use, and we do not need to use 
-            // advanced functionality that HttpWebRequest provides, such as the ability to send headers.
-            WebClient webClient = new WebClient();
-
-            // Subscribe to the DownloadStringCompleted event prior to downloading the RSS feed.
-            webClient.DownloadStringCompleted += new DownloadStringCompletedEventHandler(webClient_DownloadStringCompleted);
-
-            // Download the RSS feed. DownloadStringAsync was used instead of OpenStreamAsync because we do not need 
-            // to leave a stream open, and we will not need to worry about closing the channel. 
-            webClient.DownloadStringAsync(new System.Uri("http://careers.stackoverflow.com/jobs/feed?searchTerm=austin&allowsremote=True"));
-
+            SearchCareers();
         }
 
         private void LocationTextEventHandler(object sender, string s)
@@ -289,13 +280,28 @@ namespace StackOverflowCareers.ViewModels
             }
         }
 
-        public void SearchCareers()
+        public void SearchCareers(SearchCriteria criteria = null)
         {
-            var criteria = BuildCriteria();
+            WebClient webClient = new WebClient();
 
+            webClient.DownloadStringCompleted +=
+                new DownloadStringCompletedEventHandler(webClient_DownloadStringCompleted);
+            var url = SearchUrl;
+            if (criteria != null)
+            {
+                string criteriaString = "";
+                foreach (var searchParameter in criteria.Criteria)
+                {
+                    criteriaString = string.Format("{0}{1}={2}&", criteriaString, searchParameter.QueryString, searchParameter.QueryValue);
+                }
+                url = string.Format("{0}{1}", url, criteriaString);
+            }
+
+            webClient.DownloadStringAsync(new Uri(url));
         }
 
-        private SearchCriteria BuildCriteria()
+
+        public SearchCriteria BuildCriteria()
         {
             var criteria = new SearchCriteria();
             if (!string.IsNullOrWhiteSpace(_WhatSearchText))
@@ -332,9 +338,7 @@ namespace StackOverflowCareers.ViewModels
 
         internal void RoundDistance(double sliderValue)
         {
-            var heh = Math.Round((sliderValue/10)*10);
-            Distance = Convert.ToInt32(Math.Round((sliderValue / 10.0) * 10));
-
+            Distance = Convert.ToInt32(Math.Round((sliderValue / 10.0)) * 10);
         }
     }
 }

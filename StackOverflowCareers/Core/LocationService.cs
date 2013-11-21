@@ -60,7 +60,7 @@ namespace StackOverflowCareers.Core
         private string ProcessLocationResponse(string args)
         {
             var locRes = JsonConvert.DeserializeObject<LocationServiceResults>(args);
-            return locRes.results[3].formatted_address;
+            return locRes.results[0].address_components[3].long_name;
         }
 
         public void Dispose()

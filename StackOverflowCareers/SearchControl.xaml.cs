@@ -26,11 +26,7 @@ namespace StackOverflowCareers
 
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
-            var criteria = new SearchCriteria();
-            if (!string.IsNullOrWhiteSpace(txtWhere.Text))
-            {
-                criteria.Criteria. Add(new LocationCriteria(txtWhere.Text));
-            }
+            _mainViewModel.SearchCareers(_mainViewModel.BuildCriteria());
         }
 
         private void MySlider_ValueChanged(object sender,
