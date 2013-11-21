@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Device.Location;
+using System.Globalization;
 using System.IO;
 using System.Net;
 using System.ServiceModel;
@@ -13,6 +14,7 @@ using System.Xml;
 using Microsoft.Phone.Tasks;
 using StackOverflowCareers.Core;
 using StackOverflowCareers.Model;
+using StackOverflowCareers.Model.Criteria;
 using StackOverflowCareers.Resources;
 
 namespace StackOverflowCareers.ViewModels
@@ -86,6 +88,42 @@ namespace StackOverflowCareers.ViewModels
                 _isLoading = value;
                 NotifyPropertyChanged("IsLoading");
 
+            }
+        }
+
+        private bool _IsRemote;
+
+        public bool IsRemote
+        {
+            get { return _IsRemote; }
+            set
+            {
+                _IsRemote = value;
+                NotifyPropertyChanged("IsRemote");
+            }
+        }
+
+        private bool _IsRelocation;
+
+        public bool IsRelocation
+        {
+            get { return _IsRelocation; }
+            set
+            {
+                _IsRelocation = value;
+                NotifyPropertyChanged("IsRelocation");
+            }
+        }
+
+        private int _Distance = 10;
+
+        public int Distance
+        {
+            get { return _Distance; }
+            set
+            {
+                _Distance = value;
+                NotifyPropertyChanged("Distance");
             }
         }
 
@@ -251,9 +289,37 @@ namespace StackOverflowCareers.ViewModels
             }
         }
 
-        private async Task SearchCareers()
+        public void SearchCareers()
         {
-            
+            var criteria = BuildCriteria();
+
+        }
+
+        private SearchCriteria BuildCriteria()
+        {
+            var criteria = new SearchCriteria();
+            if (!string.IsNullOrWhiteSpace(_WhatSearchText))
+            {
+                criteria.Criteria.Add(new KeyWordCriteria(_WhatSearchText));
+            }
+            if (!string.IsNullOrWhiteSpace(_WhereSearchText))
+            {
+                criteria.Criteria.Add(new LocationCriteria(_WhereSearchText));
+                criteria.Criteria.Add(new DistanceCriteria(_Distance.ToString()));
+                criteria.Criteria.Add(
+                    new DistanceUnitsCriteria(RegionInfo.CurrentRegion.IsMetric
+                        ? DistanecUnits.Kilometers
+                        : DistanecUnits.Miles));
+            }
+            if (_IsRelocation)
+            {
+                criteria.Criteria.Add(new RelocationCriteria(_IsRelocation));
+            }
+            if (_IsRemote)
+            {
+                criteria.Criteria.Add(new RemoteCriteria(_IsRemote));
+            }
+            return criteria;
         }
 
         internal void GetLocation()
@@ -262,6 +328,13 @@ namespace StackOverflowCareers.ViewModels
             {
                 _locationService.LocateThePhone();
             }
+        }
+
+        internal void RoundDistance(double sliderValue)
+        {
+            var heh = Math.Round((sliderValue/10)*10);
+            Distance = Convert.ToInt32(Math.Round((sliderValue / 10.0) * 10));
+
         }
     }
 }

@@ -35,6 +35,6 @@
         </StackPanel>
         <Button Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Content="Search" Click="ButtonBase_OnClick"/>
         <Button Grid.Row="5" Grid.Column="1" Content="location me" Click="LocateMe_OnClick"/>
-        <TextBlock Grid.Column="1" HorizontalAlignment="Center" Margin="0,0,0,0" Grid.Row="2" TextWrapping="Wrap" Text="{Binding Value, ElementName=MySlider}" VerticalAlignment="Bottom"/>
+        <TextBlock Grid.Column="1" HorizontalAlignment="Center" Margin="0,0,0,0" Grid.Row="2" TextWrapping="Wrap" Text="{Binding Distance, Mode=OneWay, FallbackValue=10}" VerticalAlignment="Bottom"/>
     </Grid>
 </UserControl>
