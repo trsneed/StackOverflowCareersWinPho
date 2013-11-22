@@ -32,7 +32,6 @@ namespace StackOverflowCareers.ViewModels
             _locationService.LocationTextEventHandler += LocationTextEventHandler;
             this.JobPostings = new ObservableCollection<JobPosting>();
 
-            SearchCareers();
         }
 
         private void LocationTextEventHandler(object sender, string s)
@@ -186,24 +185,7 @@ namespace StackOverflowCareers.ViewModels
         /// </summary>
         public void LoadData()
         {
-            // Sample data; replace with real data
-            //this.Items.Add(new ItemViewModel() { ID = "0", LineOne = "runtime one", LineTwo = "Maecenas praesent accumsan bibendum", LineThree = "Facilisi faucibus habitant inceptos interdum lobortis nascetur pharetra placerat pulvinar sagittis senectus sociosqu" });
-            //this.Items.Add(new ItemViewModel() { ID = "1", LineOne = "runtime two", LineTwo = "Dictumst eleifend facilisi faucibus", LineThree = "Suscipit torquent ultrices vehicula volutpat maecenas praesent accumsan bibendum dictumst eleifend facilisi faucibus" });
-            //this.Items.Add(new ItemViewModel() { ID = "2", LineOne = "runtime three", LineTwo = "Habitant inceptos interdum lobortis", LineThree = "Habitant inceptos interdum lobortis nascetur pharetra placerat pulvinar sagittis senectus sociosqu suscipit torquent" });
-            //this.Items.Add(new ItemViewModel() { ID = "3", LineOne = "runtime four", LineTwo = "Nascetur pharetra placerat pulvinar", LineThree = "Ultrices vehicula volutpat maecenas praesent accumsan bibendum dictumst eleifend facilisi faucibus habitant inceptos" });
-            //this.Items.Add(new ItemViewModel() { ID = "4", LineOne = "runtime five", LineTwo = "Maecenas praesent accumsan bibendum", LineThree = "Maecenas praesent accumsan bibendum dictumst eleifend facilisi faucibus habitant inceptos interdum lobortis nascetur" });
-            //this.Items.Add(new ItemViewModel() { ID = "5", LineOne = "runtime six", LineTwo = "Dictumst eleifend facilisi faucibus", LineThree = "Pharetra placerat pulvinar sagittis senectus sociosqu suscipit torquent ultrices vehicula volutpat maecenas praesent" });
-            //this.Items.Add(new ItemViewModel() { ID = "6", LineOne = "runtime seven", LineTwo = "Habitant inceptos interdum lobortis", LineThree = "Accumsan bibendum dictumst eleifend facilisi faucibus habitant inceptos interdum lobortis nascetur pharetra placerat" });
-            //this.Items.Add(new ItemViewModel() { ID = "7", LineOne = "runtime eight", LineTwo = "Nascetur pharetra placerat pulvinar", LineThree = "Pulvinar sagittis senectus sociosqu suscipit torquent ultrices vehicula volutpat maecenas praesent accumsan bibendum" });
-            //this.Items.Add(new ItemViewModel() { ID = "8", LineOne = "runtime nine", LineTwo = "Maecenas praesent accumsan bibendum", LineThree = "Facilisi faucibus habitant inceptos interdum lobortis nascetur pharetra placerat pulvinar sagittis senectus sociosqu" });
-            //this.Items.Add(new ItemViewModel() { ID = "9", LineOne = "runtime ten", LineTwo = "Dictumst eleifend facilisi faucibus", LineThree = "Suscipit torquent ultrices vehicula volutpat maecenas praesent accumsan bibendum dictumst eleifend facilisi faucibus" });
-            //this.Items.Add(new ItemViewModel() { ID = "10", LineOne = "runtime eleven", LineTwo = "Habitant inceptos interdum lobortis", LineThree = "Habitant inceptos interdum lobortis nascetur pharetra placerat pulvinar sagittis senectus sociosqu suscipit torquent" });
-            //this.Items.Add(new ItemViewModel() { ID = "11", LineOne = "runtime twelve", LineTwo = "Nascetur pharetra placerat pulvinar", LineThree = "Ultrices vehicula volutpat maecenas praesent accumsan bibendum dictumst eleifend facilisi faucibus habitant inceptos" });
-            //this.Items.Add(new ItemViewModel() { ID = "12", LineOne = "runtime thirteen", LineTwo = "Maecenas praesent accumsan bibendum", LineThree = "Maecenas praesent accumsan bibendum dictumst eleifend facilisi faucibus habitant inceptos interdum lobortis nascetur" });
-            //this.Items.Add(new ItemViewModel() { ID = "13", LineOne = "runtime fourteen", LineTwo = "Dictumst eleifend facilisi faucibus", LineThree = "Pharetra placerat pulvinar sagittis senectus sociosqu suscipit torquent ultrices vehicula volutpat maecenas praesent" });
-            //this.Items.Add(new ItemViewModel() { ID = "14", LineOne = "runtime fifteen", LineTwo = "Habitant inceptos interdum lobortis", LineThree = "Accumsan bibendum dictumst eleifend facilisi faucibus habitant inceptos interdum lobortis nascetur pharetra placerat" });
-            //this.Items.Add(new ItemViewModel() { ID = "15", LineOne = "runtime sixteen", LineTwo = "Nascetur pharetra placerat pulvinar", LineThree = "Pulvinar sagittis senectus sociosqu suscipit torquent ultrices vehicula volutpat maecenas praesent accumsan bibendum" });
-
+            
             this.IsDataLoaded = true;
         }
 
@@ -217,26 +199,10 @@ namespace StackOverflowCareers.ViewModels
             }
         }
 
-        // Event handler which runs after the feed is fully downloaded.
-        private void webClient_DownloadStringCompleted(object sender, DownloadStringCompletedEventArgs e)
-        {
-            if (e.Error != null)
-            {
-                Deployment.Current.Dispatcher.BeginInvoke(() =>
-                {
-                    // Showing the exact error message is useful for debugging. In a finalized application, 
-                    // output a friendly and applicable string to the user instead. 
-                    MessageBox.Show(e.Error.Message);
-                });
-            }
-            else
-            {
-                UpdateFeedList(e.Result);
-            }
-        }
-
+        
         private void UpdateFeedList(string feedXML)
         {
+            
             // Load the feed into a SyndicationFeed instance.
             StringReader stringReader = new StringReader(feedXML);
             XmlReader xmlReader = XmlReader.Create(stringReader);
@@ -262,6 +228,37 @@ namespace StackOverflowCareers.ViewModels
             }
         }
 
+        private async Task<List<JobPosting>> ProcessResponseToPostingsAsync(string xml)
+        {
+            StringReader stringReader = new StringReader(xml);
+            XmlReader xmlReader = XmlReader.Create(stringReader);
+            SyndicationFeed feed = SyndicationFeed.Load(xmlReader);
+            var postings = new List<JobPosting>();
+            var uncastItems = feed.Items;
+            int i = 0;
+            foreach (var syndicationItem in uncastItems)
+            {
+                var job = new JobPosting
+                {
+                    Id = syndicationItem.Id,
+                    PublishDate = syndicationItem.PublishDate.LocalDateTime,
+                    Summary = SanitizeString(syndicationItem.Summary.Text),
+                    Title = syndicationItem.Title.Text,
+                    OrderId = i
+                };
+                foreach (var cat in syndicationItem.Categories)
+                {
+                    job.Categories.Add(cat.Name);
+                }
+
+                postings.Add(job);
+                i++;
+            }
+
+            return postings;
+        }
+        
+
         private static string SanitizeString(string value)
         {
             while (true)
@@ -280,24 +277,42 @@ namespace StackOverflowCareers.ViewModels
             }
         }
 
-        public void SearchCareers(SearchCriteria criteria = null)
+        public async Task SearchCareers(SearchCriteria criteria = null)
         {
-            WebClient webClient = new WebClient();
-
-            webClient.DownloadStringCompleted +=
-                new DownloadStringCompletedEventHandler(webClient_DownloadStringCompleted);
+            IsLoading = true;
+            LoadingText = "Searching Careers";
+            JobPostings.Clear(); 
             var url = SearchUrl;
             if (criteria != null)
             {
-                string criteriaString = "";
-                foreach (var searchParameter in criteria.Criteria)
-                {
-                    criteriaString = string.Format("{0}{1}={2}&", criteriaString, searchParameter.QueryString, searchParameter.QueryValue);
-                }
+                string criteriaString = criteria.Criteria.Aggregate("",
+                    (current, searchParameter) =>
+                        string.Format("{0}{1}={2}&", current, searchParameter.QueryString, searchParameter.QueryValue));
                 url = string.Format("{0}{1}", url, criteriaString);
             }
 
-            webClient.DownloadStringAsync(new Uri(url));
+            var request = HttpWebRequest.Create(new Uri(url)) as HttpWebRequest;
+            try
+            {
+                var response = (HttpWebResponse) await request.GetResponseAsync();
+                // Read the response into a Stream object.
+                System.IO.Stream responseStream = response.GetResponseStream();
+                string data;
+                using (var reader = new System.IO.StreamReader(responseStream))
+                {
+                    data = reader.ReadToEnd();
+                }
+                responseStream.Close();
+               UpdateFeedList(data);
+
+                IsLoading = false;
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("poop");
+                throw;
+            }
+
         }
 
 

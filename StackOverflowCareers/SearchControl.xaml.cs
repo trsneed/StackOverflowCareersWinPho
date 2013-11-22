@@ -24,9 +24,11 @@ namespace StackOverflowCareers
         }
 
 
-        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+        private async void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
-            _mainViewModel.SearchCareers(_mainViewModel.BuildCriteria());
+            _mainViewModel.IsSearchOpen = false;
+           await _mainViewModel.SearchCareers(_mainViewModel.BuildCriteria());
+
         }
 
         private void MySlider_ValueChanged(object sender,

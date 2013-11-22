@@ -26,19 +26,29 @@ namespace StackOverflowCareers
             // Set the data context of the LongListSelector control to the sample data
             DataContext = _mainViewModel = App.ViewModel;
             indicator = new ProgressIndicator();
-            Binding binding = new Binding("IsLoading") { Source = DataContext };
-            Binding textBinding = new Binding("LoadingText"){Source = DataContext};
+            SystemTray.SetProgressIndicator(this, indicator);
+
+            Binding binding = new Binding("IsLoading") { Source = _mainViewModel };
+            BindingOperations.SetBinding(
+                indicator, ProgressIndicator.IsVisibleProperty, binding);
+
+            binding = new Binding("IsLoading") { Source = _mainViewModel };
+            BindingOperations.SetBinding(
+                indicator, ProgressIndicator.IsIndeterminateProperty, binding);
+
+
+            Binding textBinding = new Binding("LoadingText"){Source = _mainViewModel};
             BindingOperations.SetBinding(
                 indicator, ProgressIndicator.IsVisibleProperty, binding);
             BindingOperations.SetBinding(indicator, ProgressIndicator.TextProperty, textBinding);
         }
 
         // Load data for the ViewModel Items
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             if (!App.ViewModel.IsDataLoaded)
             {
-                App.ViewModel.LoadData();
+                await _mainViewModel.SearchCareers();
             }
         }
 
