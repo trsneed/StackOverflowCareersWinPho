@@ -13,7 +13,7 @@ using StackOverflowCareers.Model;
 
 namespace StackOverflowCareers.ViewModels
 {
-    public class JobPostingViewModel : INotifyPropertyChanged
+    public class JobPostingViewModel : BaseViewModel
     {
 
         public JobPostingViewModel(JobPosting jobPosting)
@@ -22,6 +22,7 @@ namespace StackOverflowCareers.ViewModels
                 throw new ArgumentNullException("jobPosting");
 
             _jobPosting = jobPosting;
+            ProcessCategories(jobPosting.Categories);
             ScrapeThatScreen(jobPosting.Id);
         }
 
@@ -52,16 +53,32 @@ namespace StackOverflowCareers.ViewModels
             }
         }
 
+        private void ProcessCategories(IEnumerable<string> categories)
+        {
+            var formattedStuff = categories.Aggregate("", (current, category) => current + category + ", ");
+            //remove the final comma and space
+            FormattedCategories = formattedStuff.Remove(formattedStuff.Length - 2);
+        }
 
         private void ProcessPostingResults(string result)
         {
-            var document = new HtmlAgilityPack.HtmlDocument();
+            var document = new HtmlDocument();
             document.LoadHtml(result);
             this.JobPosting = _jobPosting.UpdateFromScreenScraper(document);
         }
 
-        private JobPosting _jobPosting;
+        private string _formattedCategories;
 
+        public string FormattedCategories
+        {
+            get { return _formattedCategories; }
+            set
+            {
+                _formattedCategories = value;
+                OnPropertyChanged("FormattedCategories");
+            }
+        }
+        private JobPosting _jobPosting;
         public JobPosting JobPosting
         {
             get
@@ -75,26 +92,13 @@ namespace StackOverflowCareers.ViewModels
             }
         }
 
+        //public event PropertyChangedEventHandler PropertyChanged;
 
-        public static string GetText(HtmlDocument document, string elementType,string className)
-        {
-            if (document != null)
-            {
-                var firstOrDefault = document.DocumentNode.Descendants()
-                    .FirstOrDefault(node => node.GetAttributeValue(elementType, string.Empty).Contains(className));
-                if (firstOrDefault != null)
-                    return firstOrDefault.InnerText.Trim();
-            }
-            return "";
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChangedEventHandler handler = PropertyChanged;
-            if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
-        }
+        //[NotifyPropertyChangedInvocator]
+        //protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        //{
+        //    PropertyChangedEventHandler handler = PropertyChanged;
+        //    if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
+        //}
     }
 }

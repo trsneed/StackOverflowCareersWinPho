@@ -27,6 +27,7 @@ namespace StackOverflowCareers.Model
         public string CompanyWebsite { get; private set; }
         public string SpolskyTest { get; private set; }
         public string ApplyUrl { get; private set; }
+        public string JobLocation { get; private set; }
         public JobPosting UpdatePostingFromRss(SyndicationItem syndicationItem, int i)
         {
             this.Id = syndicationItem.Id;
@@ -47,7 +48,7 @@ namespace StackOverflowCareers.Model
         {
             this.Title = document.GetText("class", "title");
             this.Company = document.GetText("class", "employer");
-
+            this.JobLocation = document.GetText("class", "location");
             var descriptionTest =
                 document.DocumentNode.Descendants()
                     .Where(node => node.GetAttributeValue("class", string.Empty).Contains("description")).ToList();

@@ -9,6 +9,9 @@
     <!--Application Resources-->
     <Application.Resources>
         <local:LocalizedStrings xmlns:local="clr-namespace:StackOverflowCareers" x:Key="LocalizedStrings"/>
+        <Style  x:Name="WrappedTextStyle" BasedOn="{StaticResource PhoneTextBlockBase}" TargetType="TextBlock">
+            <Setter Property="TextWrapping" Value="Wrap"/>
+        </Style>
     </Application.Resources>
 
     <Application.ApplicationLifetimeObjects>

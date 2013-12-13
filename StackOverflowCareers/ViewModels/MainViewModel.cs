@@ -20,7 +20,7 @@ using StackOverflowCareers.Resources;
 
 namespace StackOverflowCareers.ViewModels
 {
-    public class MainViewModel : INotifyPropertyChanged
+    public class MainViewModel : BaseViewModel
     {
         private LocationService _locationService;
         public const string SearchUrl = "http://careers.stackoverflow.com/jobs/feed?";
@@ -31,7 +31,6 @@ namespace StackOverflowCareers.ViewModels
             _locationService.WatcherReadyEventHandler += WatcherReady;
             _locationService.LocationTextEventHandler += LocationTextEventHandler;
             this.JobPostings = new ObservableCollection<JobPosting>();
-
         }
 
         private void LocationTextEventHandler(object sender, string s)
@@ -55,7 +54,7 @@ namespace StackOverflowCareers.ViewModels
             set
             {
                 _JobPostings = value;
-                NotifyPropertyChanged("JobPositings");
+                OnPropertyChanged("JobPostings");
             }
         }
 
@@ -63,22 +62,6 @@ namespace StackOverflowCareers.ViewModels
         {
             get;
             private set;
-        }
-
-        private bool _isLoading = false;
-
-        public bool IsLoading
-        {
-            get
-            {
-                return _isLoading;
-            }
-            set
-            {
-                _isLoading = value;
-                NotifyPropertyChanged("IsLoading");
-
-            }
         }
 
         private bool _IsRemote;
@@ -89,7 +72,7 @@ namespace StackOverflowCareers.ViewModels
             set
             {
                 _IsRemote = value;
-                NotifyPropertyChanged("IsRemote");
+                OnPropertyChanged("IsRemote");
             }
         }
 
@@ -101,7 +84,7 @@ namespace StackOverflowCareers.ViewModels
             set
             {
                 _IsRelocation = value;
-                NotifyPropertyChanged("IsRelocation");
+                OnPropertyChanged("IsRelocation");
             }
         }
 
@@ -113,22 +96,7 @@ namespace StackOverflowCareers.ViewModels
             set
             {
                 _Distance = value;
-                NotifyPropertyChanged("Distance");
-            }
-        }
-
-        private string _LoadingText;
-
-        public string LoadingText
-        {
-            get
-            {
-                return _LoadingText;
-            }
-            set
-            {
-                _LoadingText = value;
-                NotifyPropertyChanged("LoadingText");
+                OnPropertyChanged("Distance");
             }
         }
 
@@ -140,43 +108,40 @@ namespace StackOverflowCareers.ViewModels
             set
             {
                 _IsSearchOpen = value;
-                NotifyPropertyChanged("IsSearchOpen");
+                OnPropertyChanged("IsSearchOpen");
             }
         }
 
         private bool _LocationServiceReady;
-
         public bool LocationServiceReady
         {
             get { return _LocationServiceReady; }
             set
             {
                 _LocationServiceReady = value;
-                NotifyPropertyChanged("LocationServiceReady");
+                OnPropertyChanged("LocationServiceReady");
             }
         }
 
         private string _WhatSearchText;
-
         public string WhatSearchText
         {
             get { return _WhatSearchText; }
             set
             {
                 _WhatSearchText = value;
-                NotifyPropertyChanged("WhatSearchText");
+                OnPropertyChanged("WhatSearchText");
             }
         }
 
         private string _WhereSearchText;
-
         public string WhereSearchText
         {
             get { return _WhereSearchText; }
             set
             {
                 _WhereSearchText = value;
-                NotifyPropertyChanged("WhereSearchText");
+                OnPropertyChanged("WhereSearchText");
             }
         }
 
@@ -190,16 +155,8 @@ namespace StackOverflowCareers.ViewModels
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
-        private void NotifyPropertyChanged(String propertyName)
-        {
-            PropertyChangedEventHandler handler = PropertyChanged;
-            if (null != handler)
-            {
-                handler(this, new PropertyChangedEventArgs(propertyName));
-            }
-        }
 
-        
+
         private void UpdateFeedList(string feedXML)
         {
             
@@ -246,7 +203,7 @@ namespace StackOverflowCareers.ViewModels
                 }
                 responseStream.Close();
                UpdateFeedList(data);
-                
+
                 IsLoading = false;
             }
             catch (Exception)

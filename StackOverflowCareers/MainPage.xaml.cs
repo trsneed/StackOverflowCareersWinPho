@@ -25,22 +25,23 @@ namespace StackOverflowCareers
 
             // Set the data context of the LongListSelector control to the sample data
             DataContext = _mainViewModel = App.ViewModel;
-            indicator = new ProgressIndicator();
-            SystemTray.SetProgressIndicator(this, indicator);
+            Indicators.SetIndicators(this, _mainViewModel);
+            //indicator = new ProgressIndicator();
+            //SystemTray.SetProgressIndicator(this, indicator);
 
-            Binding binding = new Binding("IsLoading") { Source = _mainViewModel };
-            BindingOperations.SetBinding(
-                indicator, ProgressIndicator.IsVisibleProperty, binding);
+            //Binding binding = new Binding("IsLoading") { Source = _mainViewModel };
+            //BindingOperations.SetBinding(
+            //    indicator, ProgressIndicator.IsVisibleProperty, binding);
 
-            binding = new Binding("IsLoading") { Source = _mainViewModel };
-            BindingOperations.SetBinding(
-                indicator, ProgressIndicator.IsIndeterminateProperty, binding);
+            //binding = new Binding("IsLoading") { Source = _mainViewModel };
+            //BindingOperations.SetBinding(
+            //    indicator, ProgressIndicator.IsIndeterminateProperty, binding);
 
 
-            Binding textBinding = new Binding("LoadingText"){Source = _mainViewModel};
-            BindingOperations.SetBinding(
-                indicator, ProgressIndicator.IsVisibleProperty, binding);
-            BindingOperations.SetBinding(indicator, ProgressIndicator.TextProperty, textBinding);
+            //Binding textBinding = new Binding("LoadingText"){Source = _mainViewModel};
+            //BindingOperations.SetBinding(
+            //    indicator, ProgressIndicator.IsVisibleProperty, binding);
+            //BindingOperations.SetBinding(indicator, ProgressIndicator.TextProperty, textBinding);
         }
 
         // Load data for the ViewModel Items
