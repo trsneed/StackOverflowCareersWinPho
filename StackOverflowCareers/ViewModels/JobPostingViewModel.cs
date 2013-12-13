@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Net;
@@ -15,16 +16,52 @@ namespace StackOverflowCareers.ViewModels
     public class JobPostingViewModel : INotifyPropertyChanged
     {
 
-        public JobPostingViewModel(JobPosting post)
+        public JobPostingViewModel(JobPosting jobPosting)
         {
-            if(post == null)
-                throw new ArgumentNullException("post");
-            JobPosting = post;
-            ScrapeThatScreen();
+            if(jobPosting == null)
+                throw new ArgumentNullException("jobPosting");
+
+            _jobPosting = jobPosting;
+            ScrapeThatScreen(jobPosting.Id);
+        }
+
+        public async Task ScrapeThatScreen(string postUrl)
+        {
+            if (!string.IsNullOrWhiteSpace(postUrl))
+            {
+                var request = WebRequest.Create(new Uri(postUrl)) as HttpWebRequest;
+                try
+                {
+                    var result = request.GetResponseAsync();
+                    await result;
+
+                    System.IO.Stream responseStream = result.Result.GetResponseStream();
+                    string data;
+                    using (var reader = new System.IO.StreamReader(responseStream))
+                    {
+                        data = reader.ReadToEnd();
+                    }
+                    responseStream.Close();
+                    this.ProcessPostingResults(data);
+                }
+                catch (Exception)
+                {
+                    
+                    throw;
+                }
+            }
         }
 
 
+        private void ProcessPostingResults(string result)
+        {
+            var document = new HtmlAgilityPack.HtmlDocument();
+            document.LoadHtml(result);
+            this.JobPosting = _jobPosting.UpdateFromScreenScraper(document);
+        }
+
         private JobPosting _jobPosting;
+
         public JobPosting JobPosting
         {
             get
@@ -33,35 +70,24 @@ namespace StackOverflowCareers.ViewModels
             }
             set
             {
-                if (value != _jobPosting)
-                {
-                    _jobPosting = value;
-                    OnPropertyChanged("JobPosting");
-                }
+                _jobPosting = value;
+                OnPropertyChanged("JobPosting");
             }
         }
 
-        public void ScrapeThatScreen()
+
+        public static string GetText(HtmlDocument document, string elementType,string className)
         {
-            if (!string.IsNullOrWhiteSpace(_jobPosting.Id))
+            if (document != null)
             {
-                WebClient client = new WebClient();
-                client.DownloadStringCompleted += (sender, args) => { ProcessPostingResults(args.Result.ToString()); };
-                client.DownloadStringAsync(new Uri(_jobPosting.Id));
+                var firstOrDefault = document.DocumentNode.Descendants()
+                    .FirstOrDefault(node => node.GetAttributeValue(elementType, string.Empty).Contains(className));
+                if (firstOrDefault != null)
+                    return firstOrDefault.InnerText.Trim();
             }
+            return "";
         }
 
-
-        private void ProcessPostingResults(string result)
-        {
-            var document = new HtmlDocument();
-            document.LoadHtml(result);
-            HtmlNode body = document.DocumentNode.Descendants().FirstOrDefault(n => n.Name == "body");
-            //Let's see how this works, shall we.
-            var inner = new HtmlDocument();
-            inner.LoadHtml(body.InnerHtml);
-
-        }
         public event PropertyChangedEventHandler PropertyChanged;
 
         [NotifyPropertyChangedInvocator]

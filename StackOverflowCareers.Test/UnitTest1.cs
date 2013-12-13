@@ -8,18 +8,11 @@ namespace StackOverflowCareers.Test
     [TestClass]
     public class UnitTest1
     {
+        public readonly string heh = "http://careers.stackoverflow.com/jobs/45103/designer-intego-inc";
         [TestMethod]
         public void TestMethod1()
         {
-            var client = new WebClient();
-            string res = "";
-            client.DownloadStringCompleted += (sender, args) => { Result(args.Result.ToString());};
-             client.DownloadStringAsync(new Uri("http://careers.stackoverflow.com/jobs/21823/surprisingly-simple-software-developer-wa-best-appature-inc"));
-        }
-
-        public void Result(string result)
-        {
-            
+         WebClient client = new WebClient();
         }
     }
 
@@ -31,4 +24,6 @@ namespace StackOverflowCareers.Test
         public string Title { get; set; }
         public List<string> Categories { get; set; }
     }
+
+  
 }

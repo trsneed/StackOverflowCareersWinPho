@@ -16,28 +16,80 @@
 
     <!--Data context is set to sample data above and first item in sample data collection below and LayoutRoot contains the root grid where all other page content is placed-->
     <Grid x:Name="LayoutRoot" Background="DarkOrange" d:DataContext="{Binding Items[0]}">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+        <phone:Pivot Title="Stack Overflow Careers">
+            <!--Pivot item one-->
+            <phone:PivotItem Header="job">
+                <ScrollViewer>
+                    <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Text="Job Posting Date: " FontStyle="Italic" Grid.Row="0" Style="{StaticResource PhoneTextNormalStyle}" />
+                        <TextBlock Text="{Binding JobPosting.PublishDate, StringFormat='MM/dd/yyyy', Mode=OneWay}" Grid.Row="0" Grid.Column="1" Style="{StaticResource PhoneTextNormalStyle}" />
+                        <TextBlock Text="Job Title: " FontStyle="Italic" Grid.Row="1" Style="{StaticResource PhoneTextNormalStyle}" Grid.Column="0" />
+                        <TextBlock Text="{Binding JobPosting.Title}" Grid.Row="0" Grid.Column="1" Style="{StaticResource PhoneTextNormalStyle}" />
+                        <TextBlock Grid.Row="2" Text="Categories" FontStyle="Italic" Style="{StaticResource PhoneTextNormalStyle}"/>
+                        <TextBlock Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding FormattedCategories}" Style="{StaticResource PhoneTextNormalStyle}"/>
+
+                        <TextBlock Text="Summary:" FontStyle="Italic" Grid.Row="4" Grid.Column="0"
+                       Style="{StaticResource PhoneTextNormalStyle}" />
+                        <TextBlock Text="{Binding JobPosting.Summary}" TextWrapping="Wrap" Style="{StaticResource PhoneTextNormalStyle}"  Grid.Row="5" Grid.ColumnSpan="2"
+                       Grid.Column="0" />
+                    </Grid>
+                </ScrollViewer>
+            </phone:PivotItem>
+
+            <phone:PivotItem Header="requirements">
+                <ScrollViewer>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="{Binding JobPosting.Qualifications}" Style="{StaticResource PhoneTextNormalStyle}"/>
+                    </Grid>
+                </ScrollViewer>
+            </phone:PivotItem>
+
+            <phone:PivotItem Header="company">
+                <ScrollViewer>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="Company" FontStyle="Italic" Style="{StaticResource PhoneTextNormalStyle}"/>
+                        <TextBlock Grid.Row="0" Grid.Column="1" Style="{StaticResource PhoneTextNormalStyle}" Text="{Binding JobPosting.Company}"/>
+                        <TextBlock Grid.Row="1" FontStyle="Italic" Style="{StaticResource PhoneTextNormalStyle}" Text="About"/>
+                        <TextBlock Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Style="{StaticResource PhoneTextNormalStyle}" Text="{Binding JobPosting.CompanyDescription}"/>
+                        <TextBlock Grid.Row="3" Style="{StaticResource PhoneTextNormalStyle}" FontStyle="Italic" Text="Spolsky Test"/>
+                        <TextBlock Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Style="{StaticResource PhoneTextNormalStyle}" Text="{Binding JobPosting.SpolskyTest}"/>
+                        <HyperlinkButton Grid.Row="5" Height="80" Content="more" NavigateUri="{Binding JobPosting.CompanyWebsite}" TargetName="_blank" Grid.Column="0" Grid.ColumnSpan="2"/>
+
+                    </Grid>
+                </ScrollViewer>
+            </phone:PivotItem>
+        </phone:Pivot>
 
         <!--TitlePanel contains the name of the application and page title-->
-        <StackPanel x:Name="TitlePanel" Grid.Row="0" Margin="12,17,0,28">
-            <TextBlock Text="Stack Overflow Careers" Style="{StaticResource PhoneTextNormalStyle}"/>
-            <TextBlock Text="{Binding LineOne}" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
-        </StackPanel>
-
-        <!--ContentPanel contains details text. Place additional content here-->
-        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
-            <TextBlock Text="{Binding LineThree}" TextWrapping="Wrap" Style="{StaticResource PhoneTextNormalStyle}"/>
-        </Grid>
-
-        <!--Uncomment to see an alignment grid to help ensure your controls are
-            aligned on common boundaries.  The image has a top margin of -32px to
-            account for the System Tray. Set this to 0 (or remove the margin altogether)
-            if the System Tray is hidden.
-
-            Before shipping remove this XAML and the image itself.-->
         <!--<Image Source="/Assets/AlignmentGrid.png" VerticalAlignment="Top" Height="800" Width="480" Margin="0,-32,0,0" Grid.Row="0" Grid.RowSpan="2" IsHitTestVisible="False" />-->
     </Grid>
 

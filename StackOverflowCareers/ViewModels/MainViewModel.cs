@@ -210,72 +210,14 @@ namespace StackOverflowCareers.ViewModels
 
             var uncastItems = feed.Items;
             int i = 0;
-            foreach (var syndicationItem in uncastItems)
+            foreach (var syndicationItem in uncastItems.Take(20))
             {
-                var job = new JobPosting();
-                job.Id = syndicationItem.Id;
-                job.PublishDate = syndicationItem.PublishDate.LocalDateTime;
-                job.Summary = SanitizeString(syndicationItem.Summary.Text);
-                job.Title = syndicationItem.Title.Text;
-                job.OrderId = i;
-                foreach (var cat in syndicationItem.Categories)
-                {
-                    job.Categories.Add(cat.Name);
-                }
-
-                JobPostings.Add(job);
+                JobPostings.Add(new JobPosting().UpdatePostingFromRss(syndicationItem, i));
                 i ++;
             }
-        }
+        }        
 
-        private async Task<List<JobPosting>> ProcessResponseToPostingsAsync(string xml)
-        {
-            StringReader stringReader = new StringReader(xml);
-            XmlReader xmlReader = XmlReader.Create(stringReader);
-            SyndicationFeed feed = SyndicationFeed.Load(xmlReader);
-            var postings = new List<JobPosting>();
-            var uncastItems = feed.Items;
-            int i = 0;
-            foreach (var syndicationItem in uncastItems)
-            {
-                var job = new JobPosting
-                {
-                    Id = syndicationItem.Id,
-                    PublishDate = syndicationItem.PublishDate.LocalDateTime,
-                    Summary = SanitizeString(syndicationItem.Summary.Text),
-                    Title = syndicationItem.Title.Text,
-                    OrderId = i
-                };
-                foreach (var cat in syndicationItem.Categories)
-                {
-                    job.Categories.Add(cat.Name);
-                }
-
-                postings.Add(job);
-                i++;
-            }
-
-            return postings;
-        }
         
-
-        private static string SanitizeString(string value)
-        {
-            while (true)
-            {
-                if (value.Contains("<") && value.Contains(">"))
-                {
-                    var openGator = value.IndexOf('<');
-                    var closeGator = value.IndexOf('>');
-                    var countGator = (closeGator + 1) - openGator;
-                    value = value.Remove(openGator, countGator);
-                }
-                else
-                {
-                    return value;
-                }
-            }
-        }
 
         public async Task SearchCareers(SearchCriteria criteria = null)
         {
@@ -304,7 +246,7 @@ namespace StackOverflowCareers.ViewModels
                 }
                 responseStream.Close();
                UpdateFeedList(data);
-
+                
                 IsLoading = false;
             }
             catch (Exception)
@@ -314,6 +256,8 @@ namespace StackOverflowCareers.ViewModels
             }
 
         }
+
+        
 
 
         public SearchCriteria BuildCriteria()
