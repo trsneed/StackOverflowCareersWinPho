@@ -28,13 +28,21 @@
             <TextBlock Text="Careers" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
         </StackPanel>
         <Popup x:Name="SearchPopup" Grid.Row="0" Grid.RowSpan="2" IsOpen="{Binding IsSearchOpen, FallbackValue=false}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-            <Border >           
+            <Border >
                 <stackOverflowCareers:SearchControl x:Name="SearchControl"  Margin="0,0,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
             </Border>
         </Popup>
+        <Popup x:Name="AboutPopup" Grid.Row="0" Grid.RowSpan="2" IsOpen="{Binding IsAboutOpen, FallbackValue=false}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <Border >
+            <stackOverflowCareers:AboutControl x:Name="AboutControl"  Margin="0,0,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+        </Border>
+        </Popup>
+
         <!--ContentPanel contains LongListSelector and LongListSelector ItemTemplate. Place additional content here-->
         <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
-            <phone:LongListSelector x:Name="JobPostingSelector" ItemsSource="{Binding JobPostings}" Margin="0,0,-12,0" SelectionChanged="MainLongListSelector_SelectionChanged">
+            <phone:LongListSelector x:Name="JobPostingSelector" ItemsSource="{Binding JobPostings}" Margin="0,0,-12,0" 
+                                    SelectionChanged="MainLongListSelector_SelectionChanged"
+                                    ItemRealized="main_Reailized">
                 <phone:LongListSelector.ItemTemplate>
                     <DataTemplate>
                       <StackPanel Margin="0,0,0,17">
@@ -51,6 +59,7 @@
             <shell:ApplicationBarIconButton IconUri="/Assets/Search.png" Text="Search" Click="SearchClicked"/>
             <shell:ApplicationBar.MenuItems>
                 <shell:ApplicationBarMenuItem Text="Search" Click="SearchClicked"  />
+                <shell:ApplicationBarMenuItem Text="About" Click="AboutClicked"/>
             </shell:ApplicationBar.MenuItems>
         </shell:ApplicationBar>
     </phone:PhoneApplicationPage.ApplicationBar>

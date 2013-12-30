@@ -23,18 +23,19 @@ namespace StackOverflowCareers.ViewModels
 
             _jobPosting = jobPosting;
             ProcessCategories(jobPosting.Categories);
-            ScrapeThatScreen(jobPosting.Id);
         }
 
-        public async Task ScrapeThatScreen(string postUrl)
+        public async Task ScrapeThatScreenAsync(string postUrl)
         {
+            this.IsLoading = true;
+            this.LoadingText = "Getting job information";
             if (!string.IsNullOrWhiteSpace(postUrl))
             {
                 var request = WebRequest.Create(new Uri(postUrl)) as HttpWebRequest;
                 try
                 {
                     var result = request.GetResponseAsync();
-                    await result;
+                    await Task.WhenAll(result);
 
                     System.IO.Stream responseStream = result.Result.GetResponseStream();
                     string data;
@@ -47,8 +48,12 @@ namespace StackOverflowCareers.ViewModels
                 }
                 catch (Exception)
                 {
-                    
+
                     throw;
+                }
+                finally
+                {
+                    this.IsLoading = false;
                 }
             }
         }

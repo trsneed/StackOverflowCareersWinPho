@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Windows;
@@ -18,30 +20,16 @@ namespace StackOverflowCareers
     {
         private ProgressIndicator indicator;
         private MainViewModel _mainViewModel;
+        int _offsetKnob = 5;
+
         // Constructor
         public MainPage()
         {
             InitializeComponent();
 
-            // Set the data context of the LongListSelector control to the sample data
             DataContext = _mainViewModel = App.ViewModel;
             Indicators.SetIndicators(this, _mainViewModel);
-            //indicator = new ProgressIndicator();
-            //SystemTray.SetProgressIndicator(this, indicator);
 
-            //Binding binding = new Binding("IsLoading") { Source = _mainViewModel };
-            //BindingOperations.SetBinding(
-            //    indicator, ProgressIndicator.IsVisibleProperty, binding);
-
-            //binding = new Binding("IsLoading") { Source = _mainViewModel };
-            //BindingOperations.SetBinding(
-            //    indicator, ProgressIndicator.IsIndeterminateProperty, binding);
-
-
-            //Binding textBinding = new Binding("LoadingText"){Source = _mainViewModel};
-            //BindingOperations.SetBinding(
-            //    indicator, ProgressIndicator.IsVisibleProperty, binding);
-            //BindingOperations.SetBinding(indicator, ProgressIndicator.TextProperty, textBinding);
         }
 
         // Load data for the ViewModel Items
@@ -61,7 +49,12 @@ namespace StackOverflowCareers
                 return;
 
             // Navigate to the new page
-            NavigationService.Navigate(new Uri("/DetailsPage.xaml?selectedItem=" + (JobPostingSelector.SelectedItem as JobPosting).OrderId, UriKind.Relative));
+            var jobPosting = JobPostingSelector.SelectedItem as JobPosting;
+            if (jobPosting != null)
+                NavigationService.Navigate(
+                    new Uri(
+                        "/DetailsPage.xaml?selectedItem=" + jobPosting.OrderId,
+                        UriKind.Relative));
 
             // Reset selected item to null (no selection)
             JobPostingSelector.SelectedItem = null;
@@ -72,10 +65,33 @@ namespace StackOverflowCareers
             SearchControl.Height = Application.Current.Host.Content.ActualHeight;
             SearchControl.Width = Application.Current.Host.Content.ActualWidth;
             _mainViewModel.IsSearchOpen = true;
-            
-            
+
+
         }
 
+        private async void main_Reailized(object sender, ItemRealizationEventArgs e)
+        {
+            if (!_mainViewModel.IsLoading && JobPostingSelector.ItemsSource != null &&
+                JobPostingSelector.ItemsSource.Count >= _offsetKnob)
+            {
+                if (e.ItemKind == LongListSelectorItemKind.Item)
+                {
+                    if (
+                        (e.Container.Content as JobPosting).Equals(
+                            JobPostingSelector.ItemsSource[JobPostingSelector.ItemsSource.Count - _offsetKnob]))
+                    {
+                        Debug.WriteLine("Searching for {0}", _mainViewModel.Offset);
+                        await _mainViewModel.LoadCareersOffsetAsync();
+                    }
+                }
+            }
+        }
 
+        private void AboutClicked(object sender, EventArgs e)
+        {
+            AboutControl.Height = Application.Current.Host.Content.ActualHeight;
+            AboutControl.Width = Application.Current.Host.Content.ActualWidth;
+            _mainViewModel.IsAboutOpen = true;
+        }
     }
 }

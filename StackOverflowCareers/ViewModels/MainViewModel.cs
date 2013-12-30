@@ -27,6 +27,7 @@ namespace StackOverflowCareers.ViewModels
 
         public MainViewModel()
         {
+            
             _locationService = new LocationService(new GeoCoordinateWatcher());
             _locationService.WatcherReadyEventHandler += WatcherReady;
             _locationService.LocationTextEventHandler += LocationTextEventHandler;
@@ -112,6 +113,18 @@ namespace StackOverflowCareers.ViewModels
             }
         }
 
+        private bool _IsAboutOpen;
+
+        public bool IsAboutOpen
+        {
+            get { return _IsAboutOpen; }
+            set
+            {
+                _IsAboutOpen = value;
+                OnPropertyChanged("IsAboutOpen");
+            }
+        }
+
         private bool _LocationServiceReady;
         public bool LocationServiceReady
         {
@@ -145,14 +158,7 @@ namespace StackOverflowCareers.ViewModels
             }
         }
 
-        /// <summary>
-        /// Creates and adds a few ItemViewModel objects into the Items collection.
-        /// </summary>
-        public void LoadData()
-        {
-            
-            this.IsDataLoaded = true;
-        }
+     
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -165,22 +171,30 @@ namespace StackOverflowCareers.ViewModels
             XmlReader xmlReader = XmlReader.Create(stringReader);
             SyndicationFeed feed = SyndicationFeed.Load(xmlReader);
 
-            var uncastItems = feed.Items;
-            int i = 0;
-            foreach (var syndicationItem in uncastItems.Take(20))
-            {
-                JobPostings.Add(new JobPosting().UpdatePostingFromRss(syndicationItem, i));
-                i ++;
-            }
-        }        
 
+            AddToJobPostings(feed.Items.ToList().GetRange(Offset, Offset + 20));
+
+            Offset = JobPostings.Count();
+            
+        }
+
+        private void AddToJobPostings(IEnumerable<SyndicationItem> items)
+        {
+            int i = Offset;
+            foreach (var syndicationItem in items)
+            {
+                JobPostings.Add(new JobPosting().UpdatePostingFromRss(syndicationItem,i));
+                i++;
+            }
+        }
         
 
         public async Task SearchCareers(SearchCriteria criteria = null)
         {
             IsLoading = true;
             LoadingText = "Searching Careers";
-            JobPostings.Clear(); 
+            JobPostings.Clear();
+            Offset = 0;
             var url = SearchUrl;
             if (criteria != null)
             {
@@ -196,26 +210,24 @@ namespace StackOverflowCareers.ViewModels
                 var response = (HttpWebResponse) await request.GetResponseAsync();
                 // Read the response into a Stream object.
                 System.IO.Stream responseStream = response.GetResponseStream();
-                string data;
                 using (var reader = new System.IO.StreamReader(responseStream))
                 {
-                    data = reader.ReadToEnd();
+                    _searchResult = reader.ReadToEnd();
                 }
                 responseStream.Close();
-               UpdateFeedList(data);
+                UpdateFeedList(_searchResult);
 
                 IsLoading = false;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 MessageBox.Show("poop");
                 throw;
             }
-
+            IsDataLoaded = true;
         }
 
-        
-
+       
 
         public SearchCriteria BuildCriteria()
         {
@@ -256,5 +268,30 @@ namespace StackOverflowCareers.ViewModels
         {
             Distance = Convert.ToInt32(Math.Round((sliderValue / 10.0)) * 10);
         }
+
+        internal async Task LoadCareersOffsetAsync()
+        {
+            this.IsLoading = true;
+            this.LoadingText = "updating careers list";
+            try
+            {
+                await Task.Yield();
+                this.UpdateFeedList(_searchResult);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("poop 2");
+
+                throw;
+            }
+            finally
+            {
+                this.IsLoading = false;
+            }
+            
+        }
+
+        public int Offset;
+        private string _searchResult;
     }
 }

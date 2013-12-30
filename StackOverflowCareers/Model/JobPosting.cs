@@ -49,15 +49,17 @@ namespace StackOverflowCareers.Model
             this.Title = document.GetText("class", "title");
             this.Company = document.GetText("class", "employer");
             this.JobLocation = document.GetText("class", "location");
-            var descriptionTest =
+            var jobInformation =
                 document.DocumentNode.Descendants()
                     .Where(node => node.GetAttributeValue("class", string.Empty).Contains("description")).ToList();
 
             //this is very hacky, but I am tired.
             //TODO: Figure out how to do this without relying on array index.
-            this.Summary = HttpUtility.HtmlDecode(descriptionTest[0].InnerText.Replace("Job Description", "").Trim());
-            this.CompanyDescription = HttpUtility.HtmlDecode(descriptionTest[2].InnerText.Trim());
-            this.Qualifications = HttpUtility.HtmlDecode(descriptionTest[1].InnerText.Trim());
+            this.Summary = HttpUtility.HtmlDecode(jobInformation[0].InnerText.Replace("Job Description", "").Trim());
+            if (jobInformation.Count > 1)
+                this.Qualifications = HttpUtility.HtmlDecode(jobInformation[1].InnerText.Trim());
+            if (jobInformation.Count > 2)
+                this.CompanyDescription = HttpUtility.HtmlDecode(jobInformation[2].InnerText.Trim());
 
             return this;
         }

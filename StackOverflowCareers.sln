@@ -3,9 +3,14 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StackOverflowCareers", "StackOverflowCareers\StackOverflowCareers.csproj", "{A738D1E0-5C3B-4F9A-8498-838F8574E453}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{7C9F0CD0-978E-496F-A6E3-C174554BD61E}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StackOverflowCareers.Test", "StackOverflowCareers.Test\StackOverflowCareers.Test.csproj", "{FE924D49-56C1-48EA-9FE3-5BDDF9AF4070}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StackOverflowCareers", "StackOverflowCareers\StackOverflowCareers.csproj", "{A738D1E0-5C3B-4F9A-8498-838F8574E453}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,9 +30,9 @@ Global
 		{A738D1E0-5C3B-4F9A-8498-838F8574E453}.Debug|ARM.ActiveCfg = Debug|ARM
 		{A738D1E0-5C3B-4F9A-8498-838F8574E453}.Debug|ARM.Build.0 = Debug|ARM
 		{A738D1E0-5C3B-4F9A-8498-838F8574E453}.Debug|ARM.Deploy.0 = Debug|ARM
-		{A738D1E0-5C3B-4F9A-8498-838F8574E453}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{A738D1E0-5C3B-4F9A-8498-838F8574E453}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{A738D1E0-5C3B-4F9A-8498-838F8574E453}.Debug|Mixed Platforms.Deploy.0 = Debug|Any CPU
+		{A738D1E0-5C3B-4F9A-8498-838F8574E453}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{A738D1E0-5C3B-4F9A-8498-838F8574E453}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{A738D1E0-5C3B-4F9A-8498-838F8574E453}.Debug|Mixed Platforms.Deploy.0 = Debug|x86
 		{A738D1E0-5C3B-4F9A-8498-838F8574E453}.Debug|x86.ActiveCfg = Debug|x86
 		{A738D1E0-5C3B-4F9A-8498-838F8574E453}.Debug|x86.Build.0 = Debug|x86
 		{A738D1E0-5C3B-4F9A-8498-838F8574E453}.Debug|x86.Deploy.0 = Debug|x86
@@ -43,26 +48,6 @@ Global
 		{A738D1E0-5C3B-4F9A-8498-838F8574E453}.Release|x86.ActiveCfg = Release|x86
 		{A738D1E0-5C3B-4F9A-8498-838F8574E453}.Release|x86.Build.0 = Release|x86
 		{A738D1E0-5C3B-4F9A-8498-838F8574E453}.Release|x86.Deploy.0 = Release|x86
-		{FE924D49-56C1-48EA-9FE3-5BDDF9AF4070}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{FE924D49-56C1-48EA-9FE3-5BDDF9AF4070}.Debug|ARM.ActiveCfg = Debug|ARM
-		{FE924D49-56C1-48EA-9FE3-5BDDF9AF4070}.Debug|ARM.Build.0 = Debug|ARM
-		{FE924D49-56C1-48EA-9FE3-5BDDF9AF4070}.Debug|ARM.Deploy.0 = Debug|ARM
-		{FE924D49-56C1-48EA-9FE3-5BDDF9AF4070}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{FE924D49-56C1-48EA-9FE3-5BDDF9AF4070}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{FE924D49-56C1-48EA-9FE3-5BDDF9AF4070}.Debug|Mixed Platforms.Deploy.0 = Debug|x86
-		{FE924D49-56C1-48EA-9FE3-5BDDF9AF4070}.Debug|x86.ActiveCfg = Debug|x86
-		{FE924D49-56C1-48EA-9FE3-5BDDF9AF4070}.Debug|x86.Build.0 = Debug|x86
-		{FE924D49-56C1-48EA-9FE3-5BDDF9AF4070}.Debug|x86.Deploy.0 = Debug|x86
-		{FE924D49-56C1-48EA-9FE3-5BDDF9AF4070}.Release|Any CPU.ActiveCfg = Release|x86
-		{FE924D49-56C1-48EA-9FE3-5BDDF9AF4070}.Release|ARM.ActiveCfg = Release|ARM
-		{FE924D49-56C1-48EA-9FE3-5BDDF9AF4070}.Release|ARM.Build.0 = Release|ARM
-		{FE924D49-56C1-48EA-9FE3-5BDDF9AF4070}.Release|ARM.Deploy.0 = Release|ARM
-		{FE924D49-56C1-48EA-9FE3-5BDDF9AF4070}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{FE924D49-56C1-48EA-9FE3-5BDDF9AF4070}.Release|Mixed Platforms.Build.0 = Release|x86
-		{FE924D49-56C1-48EA-9FE3-5BDDF9AF4070}.Release|Mixed Platforms.Deploy.0 = Release|x86
-		{FE924D49-56C1-48EA-9FE3-5BDDF9AF4070}.Release|x86.ActiveCfg = Release|x86
-		{FE924D49-56C1-48EA-9FE3-5BDDF9AF4070}.Release|x86.Build.0 = Release|x86
-		{FE924D49-56C1-48EA-9FE3-5BDDF9AF4070}.Release|x86.Deploy.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

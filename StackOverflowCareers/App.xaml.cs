@@ -83,12 +83,12 @@ namespace StackOverflowCareers
 
         // Code to execute when the application is activated (brought to foreground)
         // This code will not execute when the application is first launched
-        private void Application_Activated(object sender, ActivatedEventArgs e)
+        private async void Application_Activated(object sender, ActivatedEventArgs e)
         {
             // Ensure that application state is restored appropriately
             if (!App.ViewModel.IsDataLoaded)
             {
-                App.ViewModel.LoadData();
+               await App.ViewModel.SearchCareers();
             }
         }
 
@@ -103,6 +103,7 @@ namespace StackOverflowCareers
         // This code will not execute when the application is deactivated
         private void Application_Closing(object sender, ClosingEventArgs e)
         {
+
         }
 
         // Code to execute if a navigation fails
