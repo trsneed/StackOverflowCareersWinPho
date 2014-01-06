@@ -48,8 +48,7 @@
                        Style="{StaticResource PhoneTextNormalStyle}" />
                         <TextBlock Text="{Binding JobPosting.Summary}" Grid.Row="5" Grid.ColumnSpan="2"
                        Grid.Column="0" Margin="12,0,12,0" Style="{StaticResource WrappedTextStyle}"/>
-                        <HyperlinkButton Grid.Row="6" Height="80" Content="apply" NavigateUri="{Binding JobPosting.ApplyUrl}" TargetName="_blank" Grid.Column="0" Grid.ColumnSpan="2"/>
-
+                        <HyperlinkButton Grid.Row="6" Height="80" Content="view on stackoverflow careers" NavigateUri="{Binding JobPosting.ApplyUrl}" TargetName="_blank" Grid.Column="0" Grid.ColumnSpan="2"/>
                     </Grid>
                 </ScrollViewer>
             </phone:PivotItem>
@@ -85,11 +84,25 @@
                         <TextBlock Grid.Row="0" Grid.Column="0" Text="Company" FontStyle="Italic" Style="{StaticResource PhoneTextNormalStyle}"/>
                         <TextBlock Grid.Row="0" Grid.Column="1" Style="{StaticResource PhoneTextNormalStyle}" Text="{Binding JobPosting.Company}"/>
                         <TextBlock Grid.Row="1" Grid.Column="0" Text="Location" FontStyle="Italic" Style="{StaticResource PhoneTextNormalStyle}"/>
-                        <TextBlock Grid.Row="1" Grid.Column="1" Style="{StaticResource PhoneTextNormalStyle}" Text="{Binding JobPosting.JobLocation}"/>
+                        <TextBlock Grid.Row="1" Grid.Column="1" Style="{StaticResource WrappedTextStyle}" Text="{Binding JobPosting.JobLocation}"/>
                         <TextBlock Grid.Row="2" FontStyle="Italic" Style="{StaticResource PhoneTextNormalStyle}" Text="About"/>
                         <TextBlock Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Style="{StaticResource WrappedTextStyle}" Text="{Binding JobPosting.CompanyDescription}"/>
                         <TextBlock Grid.Row="4" Style="{StaticResource PhoneTextNormalStyle}" FontStyle="Italic" Text="Spolsky Test"/>
-                        <TextBlock Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Style="{StaticResource PhoneTextNormalStyle}" Text="{Binding JobPosting.SpolskyTest}"/>
+                        <ItemsControl Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding JoelTestResults}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Column="0" Text="{Binding Checked, Converter={StaticResource BoolToTextConverter}}" FontFamily="{StaticResource FontAwesome}" 
+                                                   Style="{StaticResource WrappedTextStyle}"/>
+                                        <TextBlock Grid.Column="1" Text="{Binding Name}" Style="{StaticResource WrappedTextStyle}"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
                         <HyperlinkButton Grid.Row="6" Height="80" Content="more" NavigateUri="{Binding JobPosting.CompanyWebsite}" TargetName="_blank" Grid.Column="0" Grid.ColumnSpan="2"/>
 
                     </Grid>

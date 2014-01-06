@@ -98,6 +98,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converters.cs" />
     <Compile Include="Core\LocationService.cs" />
     <Compile Include="Core\SearchService.cs" />
     <Compile Include="Enums.cs" />
@@ -119,6 +120,7 @@
     <Compile Include="Model\Criteria\RemoteCriteria.cs" />
     <Compile Include="Model\Criteria\ISearchParameter.cs" />
     <Compile Include="Model\JobPosting.cs" />
+    <Compile Include="Model\JoelTestResult.cs" />
     <Compile Include="Model\LocationServiceResult.cs" />
     <Compile Include="Model\SearchCriteria.cs" />
     <Compile Include="Properties\Annotations.cs" />
@@ -162,6 +164,9 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Library\fontawesome-webfont.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>

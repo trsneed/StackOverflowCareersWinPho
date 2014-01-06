@@ -25,10 +25,10 @@ namespace StackOverflowCareers
         // Constructor
         public MainPage()
         {
-            InitializeComponent();
 
             DataContext = _mainViewModel = App.ViewModel;
             Indicators.SetIndicators(this, _mainViewModel);
+            InitializeComponent();
 
         }
 
@@ -62,6 +62,7 @@ namespace StackOverflowCareers
 
         private void SearchClicked(object sender, EventArgs e)
         {
+
             SearchControl.Height = Application.Current.Host.Content.ActualHeight;
             SearchControl.Width = Application.Current.Host.Content.ActualWidth;
             _mainViewModel.IsSearchOpen = true;
@@ -78,7 +79,8 @@ namespace StackOverflowCareers
                 {
                     if (
                         (e.Container.Content as JobPosting).Equals(
-                            JobPostingSelector.ItemsSource[JobPostingSelector.ItemsSource.Count - _offsetKnob]))
+                            JobPostingSelector.ItemsSource[JobPostingSelector.ItemsSource.Count - _offsetKnob]) &&
+                        JobPostingSelector.ItemsSource.Count > _mainViewModel.Offset)
                     {
                         Debug.WriteLine("Searching for {0}", _mainViewModel.Offset);
                         await _mainViewModel.LoadCareersOffsetAsync();

@@ -15,8 +15,8 @@
     SupportedOrientations="Portrait"  Orientation="Portrait"
     shell:SystemTray.IsVisible="True"
     >
-
-    <!--Data context is set to sample data above and LayoutRoot contains the root grid where all other page content is placed-->
+   
+        <!--Data context is set to sample data above and LayoutRoot contains the root grid where all other page content is placed-->
     <Grid x:Name="LayoutRoot" Background="DarkOrange">
 
         <Grid.RowDefinitions>

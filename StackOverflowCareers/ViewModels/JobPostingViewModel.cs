@@ -7,6 +7,7 @@ using System.Net;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using HtmlAgilityPack;
 using StackOverflowCareers.Annotations;
 using StackOverflowCareers.Model;
@@ -21,6 +22,8 @@ namespace StackOverflowCareers.ViewModels
             if(jobPosting == null)
                 throw new ArgumentNullException("jobPosting");
 
+            JoelTestResults = new ObservableCollection<JoelTestResult>();
+           // JoelTestResults = new ObservableCollection<string>(){"a","b","c"};
             _jobPosting = jobPosting;
             ProcessCategories(jobPosting.Categories);
         }
@@ -46,9 +49,9 @@ namespace StackOverflowCareers.ViewModels
                     responseStream.Close();
                     this.ProcessPostingResults(data);
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
-
+                    MessageBox.Show("poop");
                     throw;
                 }
                 finally
@@ -84,6 +87,7 @@ namespace StackOverflowCareers.ViewModels
             }
         }
         private JobPosting _jobPosting;
+
         public JobPosting JobPosting
         {
             get
@@ -93,17 +97,18 @@ namespace StackOverflowCareers.ViewModels
             set
             {
                 _jobPosting = value;
+                JoelTestResults.Clear();
+                //foreach (var joelTestResult in value.SpolskyTest)
+                //{
+                //    JoelTestResults.Add(joelTestResult.Name);
+                //}
+                JoelTestResults = value.SpolskyTest.ToObservableCollection();
+                OnPropertyChanged("JoelTestResults");
                 OnPropertyChanged("JobPosting");
             }
         }
 
-        //public event PropertyChangedEventHandler PropertyChanged;
+        public ObservableCollection<JoelTestResult> JoelTestResults { get; set; } 
 
-        //[NotifyPropertyChangedInvocator]
-        //protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        //{
-        //    PropertyChangedEventHandler handler = PropertyChanged;
-        //    if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
-        //}
     }
 }

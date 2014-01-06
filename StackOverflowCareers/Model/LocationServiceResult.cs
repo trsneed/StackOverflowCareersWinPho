@@ -7,74 +7,60 @@ using System.Threading.Tasks;
 namespace StackOverflowCareers.Model
 {
 
-    public class AddressComponent
+
+    public class Point
     {
-        public string long_name { get; set; }
-        public string short_name { get; set; }
-        public List<string> types { get; set; }
+        public string type { get; set; }
+        public List<double> coordinates { get; set; }
     }
 
-    public class Location
+    public class Address
     {
-        public double lat { get; set; }
-        public double lng { get; set; }
+        public string addressLine { get; set; }
+        public string adminDistrict { get; set; }
+        public string adminDistrict2 { get; set; }
+        public string countryRegion { get; set; }
+        public string formattedAddress { get; set; }
+        public string locality { get; set; }
+        public string postalCode { get; set; }
     }
 
-    public class Northeast
+    public class GeocodePoint
     {
-        public double lat { get; set; }
-        public double lng { get; set; }
+        public string type { get; set; }
+        public List<double> coordinates { get; set; }
+        public string calculationMethod { get; set; }
+        public List<string> usageTypes { get; set; }
     }
 
-    public class Southwest
+    public class Resource
     {
-        public double lat { get; set; }
-        public double lng { get; set; }
+        public string __type { get; set; }
+        public List<double> bbox { get; set; }
+        public string name { get; set; }
+        public Point point { get; set; }
+        public Address address { get; set; }
+        public string confidence { get; set; }
+        public string entityType { get; set; }
+        public List<GeocodePoint> geocodePoints { get; set; }
+        public List<string> matchCodes { get; set; }
     }
 
-    public class Viewport
+    public class ResourceSet
     {
-        public Northeast northeast { get; set; }
-        public Southwest southwest { get; set; }
-    }
-
-    public class Northeast2
-    {
-        public double lat { get; set; }
-        public double lng { get; set; }
-    }
-
-    public class Southwest2
-    {
-        public double lat { get; set; }
-        public double lng { get; set; }
-    }
-
-    public class Bounds
-    {
-        public Northeast2 northeast { get; set; }
-        public Southwest2 southwest { get; set; }
-    }
-
-    public class Geometry
-    {
-        public Location location { get; set; }
-        public string location_type { get; set; }
-        public Viewport viewport { get; set; }
-        public Bounds bounds { get; set; }
+        public int estimatedTotal { get; set; }
+        public List<Resource> resources { get; set; }
     }
 
     public class LocationServiceResult
     {
-        public List<AddressComponent> address_components { get; set; }
-        public string formatted_address { get; set; }
-        public Geometry geometry { get; set; }
-        public List<string> types { get; set; }
+        public string authenticationResultCode { get; set; }
+        public string brandLogoUri { get; set; }
+        public string copyright { get; set; }
+        public List<ResourceSet> resourceSets { get; set; }
+        public int statusCode { get; set; }
+        public string statusDescription { get; set; }
+        public string traceId { get; set; }
     }
-
-    public class LocationServiceResults
-    {
-        public List<LocationServiceResult> results { get; set; }
-        public string status { get; set; }
-    }
+    
 }

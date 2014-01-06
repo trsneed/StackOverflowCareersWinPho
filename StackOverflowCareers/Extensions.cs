@@ -40,12 +40,50 @@ namespace StackOverflowCareers
         {
             if (document != null)
             {
-                var firstOrDefault = document.DocumentNode.Descendants()
-                    .FirstOrDefault(node => node.GetAttributeValue(elementType, string.Empty).Contains(className));
+                var firstOrDefault = document.GetHtmlNode(elementType, className);
+
                 if (firstOrDefault != null)
                     return firstOrDefault.InnerText.Trim();
             }
             return "";
+        }
+
+        public static string GetLink(this HtmlDocument document, string elementType, string className)
+        {
+            if (document != null)
+            {
+                var firstOrDefault = document.GetHtmlNode(elementType, className);
+                if (firstOrDefault != null)
+                {
+                    return firstOrDefault.Attributes["href"].Value;
+                }
+            }
+            return "";
+        }
+
+        private static HtmlNode GetHtmlNode(this HtmlDocument document, string elementType, string className)
+        {
+            return  document.DocumentNode.Descendants()
+                    .FirstOrDefault(node => node.GetAttributeValue(elementType, string.Empty).Contains(className));
+        }
+
+        public static IEnumerable<KeyValuePair<string, bool>> GetJoelTest(this HtmlDocument document, string elementType,
+            string className)
+        {
+            var joelList = new List<KeyValuePair<string, bool>>();
+            if (document != null)
+            {
+                var node = document.GetHtmlNode(elementType, className);
+                if (node != null)
+                    joelList.AddRange(
+                        node.Descendants()
+                            .Where(n => n.Name == "li")
+                            .Select(
+                                source =>
+                                    new KeyValuePair<string, bool>(source.InnerText,
+                                        source.Attributes["class"] != null)));
+            }
+            return joelList;
         }
 
         public static ObservableCollection<T> ToObservableCollection<T>(this IEnumerable<T> _LinqResult)

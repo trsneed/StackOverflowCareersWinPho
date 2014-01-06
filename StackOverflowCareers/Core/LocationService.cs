@@ -15,8 +15,10 @@ namespace StackOverflowCareers.Core
         private GeoCoordinateWatcher _watcher;
         public EventHandler<bool> WatcherReadyEventHandler = delegate { };
         public EventHandler<string> LocationTextEventHandler = delegate { };
-        private const string Locationserviceurl = "http://maps.googleapis.com/maps/api/geocode/json?latlng=";
+        private const string Locationserviceurl = "http://dev.virtualearth.net/REST/v1/Locations/";
 
+        private const string LocationServiceExtras =
+            "?o=json&key=Atlwhaus20qbK2vp8HizUMOxBjZzRvyRqimwbJzaQ-uqFJjLvqUtNwD53ohLknN0";
         public LocationService(GeoCoordinateWatcher watcher)
         {
             _watcher = watcher;
@@ -43,24 +45,28 @@ namespace StackOverflowCareers.Core
             }
         }
 
-        public void LocateThePhone()
+        public async Task LocateThePhone()
         {
             var myPoint = _watcher.Position;
-            var url = string.Format("{0}{1},{2}&sensor=true", Locationserviceurl, myPoint.Location.Latitude, myPoint.Location.Longitude);
-            var result = new WebClient();
-            result.DownloadStringCompleted += (sender, args) =>
+
+            var url = string.Format("{0}{1},{2}{3}", Locationserviceurl, myPoint.Location.Latitude,
+                myPoint.Location.Longitude, LocationServiceExtras);
+
+            var request = HttpWebRequest.Create(new Uri(url)) as HttpWebRequest;
+            var response = (HttpWebResponse) await request.GetResponseAsync();
+            string locRes;
+            System.IO.Stream responseStream = response.GetResponseStream();
+            using (var reader = new System.IO.StreamReader(responseStream))
             {
-               this.LocationTextEventHandler(this, ProcessLocationResponse(args.Result.ToString()));
-            };
-            result.DownloadStringAsync(new Uri(url));
-
-
+                locRes = reader.ReadToEnd();
+            }
+            this.LocationTextEventHandler(this, ProcessLocationResponse(locRes));
         }
 
         private string ProcessLocationResponse(string args)
         {
-            var locRes = JsonConvert.DeserializeObject<LocationServiceResults>(args);
-            return locRes.results[0].address_components[3].long_name;
+            var locRes = JsonConvert.DeserializeObject<LocationServiceResult>(args);
+            return locRes.resourceSets.First().resources.First().address.locality;
         }
 
         public void Dispose()

@@ -14,6 +14,7 @@ namespace StackOverflowCareers.Model
     {
         public JobPosting()
         {
+            SpolskyTest = new List<JoelTestResult>();
         }
         public string  Id { get; private set; }
         public DateTime PublishDate { get; private set; }
@@ -25,7 +26,7 @@ namespace StackOverflowCareers.Model
         public string Company { get; private set; }
         public string CompanyDescription { get; private set; }
         public string CompanyWebsite { get; private set; }
-        public string SpolskyTest { get; private set; }
+        public List<JoelTestResult> SpolskyTest { get; private set; }
         public string ApplyUrl { get; private set; }
         public string JobLocation { get; private set; }
         public JobPosting UpdatePostingFromRss(SyndicationItem syndicationItem, int i)
@@ -49,6 +50,13 @@ namespace StackOverflowCareers.Model
             this.Title = document.GetText("class", "title");
             this.Company = document.GetText("class", "employer");
             this.JobLocation = document.GetText("class", "location");
+            this.CompanyWebsite = document.GetLink("class", "employer");
+            this.SpolskyTest.Clear();
+            foreach (var test in document.GetJoelTest("id", "joeltest"))
+            {
+                this.SpolskyTest.Add(new JoelTestResult(test));
+            }
+            this.ApplyUrl = this.Id;
             var jobInformation =
                 document.DocumentNode.Descendants()
                     .Where(node => node.GetAttributeValue("class", string.Empty).Contains("description")).ToList();

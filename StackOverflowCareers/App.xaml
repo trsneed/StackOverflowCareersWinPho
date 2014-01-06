@@ -12,6 +12,9 @@
         <Style  x:Name="WrappedTextStyle" BasedOn="{StaticResource PhoneTextBlockBase}" TargetType="TextBlock">
             <Setter Property="TextWrapping" Value="Wrap"/>
         </Style>
+        <FontFamily x:Key="FontAwesome">/Library/fontawesome-webfont.ttf#FontAwesome</FontFamily>
+        
+        <stackOverflowCareers:BoolToTextConverter x:Key="BoolToTextConverter"/>
     </Application.Resources>
 
     <Application.ApplicationLifetimeObjects>

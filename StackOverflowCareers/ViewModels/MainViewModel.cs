@@ -65,6 +65,18 @@ namespace StackOverflowCareers.ViewModels
             private set;
         }
 
+        private Visibility _AppBarVisibility;
+
+        public Visibility AppBarVisibility
+        {
+            get { return _AppBarVisibility; }
+            set
+            {
+                _AppBarVisibility = value;
+                OnPropertyChanged();
+            }
+        }
+
         private bool _IsRemote;
 
         public bool IsRemote
@@ -109,6 +121,7 @@ namespace StackOverflowCareers.ViewModels
             set
             {
                 _IsSearchOpen = value;
+               
                 OnPropertyChanged("IsSearchOpen");
             }
         }
@@ -158,24 +171,29 @@ namespace StackOverflowCareers.ViewModels
             }
         }
 
-     
+        
 
         public event PropertyChangedEventHandler PropertyChanged;
 
 
         private void UpdateFeedList(string feedXML)
         {
-            
+
             // Load the feed into a SyndicationFeed instance.
             StringReader stringReader = new StringReader(feedXML);
             XmlReader xmlReader = XmlReader.Create(stringReader);
             SyndicationFeed feed = SyndicationFeed.Load(xmlReader);
 
+            if (feed.Items.Any())
+            {
+                int itemOffsetInt = 20;
+                if (feed.Items.Count() < 20)
+                    itemOffsetInt = feed.Items.Count();
 
-            AddToJobPostings(feed.Items.ToList().GetRange(Offset, Offset + 20));
-
+                AddToJobPostings(feed.Items.ToList().GetRange(Offset, Offset + itemOffsetInt));
+            }
             Offset = JobPostings.Count();
-            
+
         }
 
         private void AddToJobPostings(IEnumerable<SyndicationItem> items)
@@ -256,11 +274,27 @@ namespace StackOverflowCareers.ViewModels
             return criteria;
         }
 
-        internal void GetLocation()
+        internal async Task GetLocation()
         {
-            if (_LocationServiceReady)
+            IsLoading = true;
+            LoadingText = "Getting Location";
+            try
             {
-                _locationService.LocateThePhone();
+
+
+                if (_LocationServiceReady)
+                {
+                    await _locationService.LocateThePhone();
+                }
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("poop");
+                throw;
+            }
+            finally
+            {
+                IsLoading = false;
             }
         }
 
@@ -278,7 +312,7 @@ namespace StackOverflowCareers.ViewModels
                 await Task.Yield();
                 this.UpdateFeedList(_searchResult);
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 MessageBox.Show("poop 2");
 

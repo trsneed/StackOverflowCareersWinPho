@@ -27,7 +27,7 @@
         <TextBlock Style="{StaticResource PhoneTextNormalStyle}" Grid.Row="1" Grid.Column="0" Text="Author's Site:"/>
         <HyperlinkButton Grid.Row="1" Grid.Column="1" Content="trsneed.com" NavigateUri="trsneed.com" Width="Auto" />
         <TextBlock Style="{StaticResource PhoneTextNormalStyle}" Grid.Row="2" Grid.Column="0" Text="Source Code:"/>
-        <HyperlinkButton Grid.Row="2" Grid.Column="1" Content="github" NavigateUri="github.com/trsneed/StackOverFlowCareersWinPho" Width="Auto" />
+        <HyperlinkButton Grid.Row="2" Grid.Column="1" Content="github" NavigateUri="github.com/trsneed/StackOverflowCareersWinPho" Width="Auto" />
         <TextBlock Style="{StaticResource PhoneTextNormalStyle}" Grid.Row="3" Grid.Column="0" Text="This is not an official StackOverflow Application" TextWrapping="Wrap" Grid.ColumnSpan="2"/>
         <Button Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Content="Close" Click="ButtonBase_OnClick"/>
     </Grid>
