@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Data;
 
 namespace StackOverflowCareers
@@ -14,7 +10,7 @@ namespace StackOverflowCareers
         {
             if (value != null)
             {
-                return (bool)value ? "\uf046" : "\uf096";
+                return (bool) value ? "\uf046" : "\uf096";
             }
             return null;
         }

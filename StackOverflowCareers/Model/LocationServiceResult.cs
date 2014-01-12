@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace StackOverflowCareers.Model
 {
-
-
     public class Point
     {
         public string type { get; set; }
@@ -62,5 +56,4 @@ namespace StackOverflowCareers.Model
         public string statusDescription { get; set; }
         public string traceId { get; set; }
     }
-    
 }

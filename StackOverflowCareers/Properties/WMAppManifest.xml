@@ -1,7 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
+
 <Deployment xmlns="http://schemas.microsoft.com/windowsphone/2012/deployment" AppPlatformVersion="8.0">
   <DefaultLanguage xmlns="" code="en-US" />
-  <App xmlns="" ProductID="{a738d1e0-5c3b-4f9a-8498-838f8574e453}" Title="Stack Overflow Careers" RuntimeType="Silverlight" Version="1.0.0.0" Genre="apps.normal" Author="Tim Sneed" Description="An unofficial open-source viewer of stack overflow careers." Publisher="StackOverflowCareers" PublisherID="{c502f4fc-c1d6-4a7c-9734-ff9b4a5f2f4e}">
+  <App xmlns="" ProductID="{a738d1e0-5c3b-4f9a-8498-838f8574e453}" Title="Stack Overflow Careers"
+       RuntimeType="Silverlight" Version="1.0.0.0" Genre="apps.normal" Author="Tim Sneed"
+       Description="An unofficial open-source viewer of stack overflow careers." Publisher="StackOverflowCareers"
+       PublisherID="{c502f4fc-c1d6-4a7c-9734-ff9b4a5f2f4e}">
     <IconPath IsRelative="true" IsResource="false">Assets\ApplicationIcon.png</IconPath>
     <Capabilities>
       <Capability Name="ID_CAP_NETWORKING" />

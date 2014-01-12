@@ -2,7 +2,7 @@
 {
     public interface ISearchParameter
     {
-        string QueryString { get;  }
+        string QueryString { get; }
         string QueryValue { get; }
     }
 }

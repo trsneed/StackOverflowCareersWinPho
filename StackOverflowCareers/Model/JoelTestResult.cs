@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace StackOverflowCareers.Model
 {
@@ -13,8 +9,9 @@ namespace StackOverflowCareers.Model
             Name = resPair.Key;
             Checked = resPair.Value;
         }
-       public string Name { get; private set; }
-       public bool Checked { get; private set; }
+
+        public string Name { get; private set; }
+        public bool Checked { get; private set; }
 
         public override string ToString()
         {

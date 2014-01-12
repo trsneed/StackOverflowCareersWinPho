@@ -12,43 +12,48 @@
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
-    SupportedOrientations="Portrait"  Orientation="Portrait"
-    shell:SystemTray.IsVisible="True"
-    >
-   
-        <!--Data context is set to sample data above and LayoutRoot contains the root grid where all other page content is placed-->
+    SupportedOrientations="Portrait" Orientation="Portrait"
+    shell:SystemTray.IsVisible="True">
+
+    <!--Data context is set to sample data above and LayoutRoot contains the root grid where all other page content is placed-->
     <Grid x:Name="LayoutRoot" Background="DarkOrange">
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Margin="12,17,0,28">
-            <TextBlock Text="Stack Overflow" Style="{StaticResource PhoneTextNormalStyle}"/>
-            <TextBlock Text="Careers" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
+            <TextBlock Text="Stack Overflow" Style="{StaticResource PhoneTextNormalStyle}" />
+            <TextBlock Text="Careers" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}" />
         </StackPanel>
-        <Popup x:Name="SearchPopup" Grid.Row="0" Grid.RowSpan="2" IsOpen="{Binding IsSearchOpen, FallbackValue=false}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-            <Border >
-                <stackOverflowCareers:SearchControl x:Name="SearchControl"  Margin="0,0,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+        <Popup x:Name="SearchPopup" Grid.Row="0" Grid.RowSpan="2" IsOpen="{Binding IsSearchOpen, FallbackValue=false}"
+               HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <Border>
+                <stackOverflowCareers:SearchControl x:Name="SearchControl" Margin="0,0,0,0"
+                                                    HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
             </Border>
         </Popup>
-        <Popup x:Name="AboutPopup" Grid.Row="0" Grid.RowSpan="2" IsOpen="{Binding IsAboutOpen, FallbackValue=false}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-        <Border >
-            <stackOverflowCareers:AboutControl x:Name="AboutControl"  Margin="0,0,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-        </Border>
+        <Popup x:Name="AboutPopup" Grid.Row="0" Grid.RowSpan="2" IsOpen="{Binding IsAboutOpen, FallbackValue=false}"
+               HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <Border>
+                <stackOverflowCareers:AboutControl x:Name="AboutControl" Margin="0,0,0,0" HorizontalAlignment="Stretch"
+                                                   VerticalAlignment="Stretch" />
+            </Border>
         </Popup>
 
         <!--ContentPanel contains LongListSelector and LongListSelector ItemTemplate. Place additional content here-->
         <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
-            <phone:LongListSelector x:Name="JobPostingSelector" ItemsSource="{Binding JobPostings}" Margin="0,0,-12,0" 
+            <phone:LongListSelector x:Name="JobPostingSelector" ItemsSource="{Binding JobPostings}" Margin="0,0,-12,0"
                                     SelectionChanged="MainLongListSelector_SelectionChanged"
                                     ItemRealized="main_Reailized">
                 <phone:LongListSelector.ItemTemplate>
                     <DataTemplate>
-                      <StackPanel Margin="0,0,0,17">
-                          <TextBlock Text="{Binding Title}" TextWrapping="NoWrap" Style="{StaticResource PhoneTextExtraLargeStyle}"/>
-                          <TextBlock Text="{Binding Summary}" TextWrapping="NoWrap" Margin="12,-6,12,0" Style="{StaticResource PhoneTextSubtleStyle}"/>
-                      </StackPanel>
+                        <StackPanel Margin="0,0,0,17">
+                            <TextBlock Text="{Binding Title}" TextWrapping="NoWrap"
+                                       Style="{StaticResource PhoneTextExtraLargeStyle}" />
+                            <TextBlock Text="{Binding Summary}" TextWrapping="NoWrap" Margin="12,-6,12,0"
+                                       Style="{StaticResource PhoneTextSubtleStyle}" Height="28"/>
+                        </StackPanel>
                     </DataTemplate>
                 </phone:LongListSelector.ItemTemplate>
             </phone:LongListSelector>
@@ -56,10 +61,10 @@
     </Grid>
     <phone:PhoneApplicationPage.ApplicationBar>
         <shell:ApplicationBar IsVisible="True" IsMenuEnabled="True">
-            <shell:ApplicationBarIconButton IconUri="/Assets/Search.png" Text="Search" Click="SearchClicked"/>
+            <shell:ApplicationBarIconButton IconUri="/Assets/Search.png" Text="Search" Click="SearchClicked" />
             <shell:ApplicationBar.MenuItems>
-                <shell:ApplicationBarMenuItem Text="Search" Click="SearchClicked"  />
-                <shell:ApplicationBarMenuItem Text="About" Click="AboutClicked"/>
+                <shell:ApplicationBarMenuItem Text="Search" Click="SearchClicked" />
+                <shell:ApplicationBarMenuItem Text="About" Click="AboutClicked" />
             </shell:ApplicationBar.MenuItems>
         </shell:ApplicationBar>
     </phone:PhoneApplicationPage.ApplicationBar>

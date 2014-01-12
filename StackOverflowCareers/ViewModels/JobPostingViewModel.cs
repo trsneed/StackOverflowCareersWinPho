@@ -1,81 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Net;
-using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using HtmlAgilityPack;
-using StackOverflowCareers.Annotations;
 using StackOverflowCareers.Model;
 
 namespace StackOverflowCareers.ViewModels
 {
     public class JobPostingViewModel : BaseViewModel
     {
+        private string _formattedCategories;
+
+        private JobPosting _jobPosting;
 
         public JobPostingViewModel(JobPosting jobPosting)
         {
-            if(jobPosting == null)
+            if (jobPosting == null)
                 throw new ArgumentNullException("jobPosting");
 
             JoelTestResults = new ObservableCollection<JoelTestResult>();
-           // JoelTestResults = new ObservableCollection<string>(){"a","b","c"};
+            // JoelTestResults = new ObservableCollection<string>(){"a","b","c"};
             _jobPosting = jobPosting;
-            ProcessCategories(jobPosting.Categories);
+            if (jobPosting.Categories != null && jobPosting.Categories.Any())
+                ProcessCategories(jobPosting.Categories);
         }
-
-        public async Task ScrapeThatScreenAsync(string postUrl)
-        {
-            this.IsLoading = true;
-            this.LoadingText = "Getting job information";
-            if (!string.IsNullOrWhiteSpace(postUrl))
-            {
-                var request = WebRequest.Create(new Uri(postUrl)) as HttpWebRequest;
-                try
-                {
-                    var result = request.GetResponseAsync();
-                    await Task.WhenAll(result);
-
-                    System.IO.Stream responseStream = result.Result.GetResponseStream();
-                    string data;
-                    using (var reader = new System.IO.StreamReader(responseStream))
-                    {
-                        data = reader.ReadToEnd();
-                    }
-                    responseStream.Close();
-                    this.ProcessPostingResults(data);
-                }
-                catch (Exception e)
-                {
-                    MessageBox.Show("poop");
-                    throw;
-                }
-                finally
-                {
-                    this.IsLoading = false;
-                }
-            }
-        }
-
-        private void ProcessCategories(IEnumerable<string> categories)
-        {
-            var formattedStuff = categories.Aggregate("", (current, category) => current + category + ", ");
-            //remove the final comma and space
-            FormattedCategories = formattedStuff.Remove(formattedStuff.Length - 2);
-        }
-
-        private void ProcessPostingResults(string result)
-        {
-            var document = new HtmlDocument();
-            document.LoadHtml(result);
-            this.JobPosting = _jobPosting.UpdateFromScreenScraper(document);
-        }
-
-        private string _formattedCategories;
 
         public string FormattedCategories
         {
@@ -86,14 +38,10 @@ namespace StackOverflowCareers.ViewModels
                 OnPropertyChanged("FormattedCategories");
             }
         }
-        private JobPosting _jobPosting;
 
         public JobPosting JobPosting
         {
-            get
-            {
-                return _jobPosting;
-            }
+            get { return _jobPosting; }
             set
             {
                 _jobPosting = value;
@@ -108,7 +56,53 @@ namespace StackOverflowCareers.ViewModels
             }
         }
 
-        public ObservableCollection<JoelTestResult> JoelTestResults { get; set; } 
+        public ObservableCollection<JoelTestResult> JoelTestResults { get; set; }
 
+        public async Task ScrapeThatScreenAsync(string postUrl)
+        {
+            IsLoading = true;
+            LoadingText = "Getting job information";
+            if (!string.IsNullOrWhiteSpace(postUrl))
+            {
+                var request = WebRequest.Create(new Uri(postUrl)) as HttpWebRequest;
+                try
+                {
+                    Task<HttpWebResponse> result = request.GetResponseAsync();
+                    await Task.WhenAll(result);
+
+                    Stream responseStream = result.Result.GetResponseStream();
+                    string data;
+                    using (var reader = new StreamReader(responseStream))
+                    {
+                        data = reader.ReadToEnd();
+                    }
+                    responseStream.Close();
+                    ProcessPostingResults(data);
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show("poop");
+                    throw;
+                }
+                finally
+                {
+                    IsLoading = false;
+                }
+            }
+        }
+
+        private void ProcessCategories(IEnumerable<string> categories)
+        {
+            string formattedStuff = categories.Aggregate("", (current, category) => current + category + ", ");
+            //remove the final comma and space
+            FormattedCategories = formattedStuff.Remove(formattedStuff.Length - 2);
+        }
+
+        private void ProcessPostingResults(string result)
+        {
+            var document = new HtmlDocument();
+            document.LoadHtml(result);
+            JobPosting = _jobPosting.UpdateFromScreenScraper(document);
+        }
     }
 }

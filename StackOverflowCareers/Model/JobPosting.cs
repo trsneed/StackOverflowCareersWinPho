@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.ServiceModel.Syndication;
-using System.Text;
-using System.Threading.Tasks;
-using Windows.UI.Input;
 using HtmlAgilityPack;
 
 namespace StackOverflowCareers.Model
@@ -16,7 +13,8 @@ namespace StackOverflowCareers.Model
         {
             SpolskyTest = new List<JoelTestResult>();
         }
-        public string  Id { get; private set; }
+
+        public string Id { get; private set; }
         public DateTime PublishDate { get; private set; }
         public string Summary { get; private set; }
         public string Title { get; private set; }
@@ -29,17 +27,18 @@ namespace StackOverflowCareers.Model
         public List<JoelTestResult> SpolskyTest { get; private set; }
         public string ApplyUrl { get; private set; }
         public string JobLocation { get; private set; }
+
         public JobPosting UpdatePostingFromRss(SyndicationItem syndicationItem, int i)
         {
-            this.Id = syndicationItem.Id;
-            this.PublishDate = syndicationItem.PublishDate.LocalDateTime;
-            this.Summary = SanitizeString(syndicationItem.Summary.Text);
-            this.Title = syndicationItem.Title.Text;
-            this.OrderId = i;
-            this.Categories = new List<string>();
-            foreach (var cat in syndicationItem.Categories)
+            Id = syndicationItem.Id;
+            PublishDate = syndicationItem.PublishDate.LocalDateTime;
+            Summary = SanitizeString(syndicationItem.Summary.Text);
+            Title = syndicationItem.Title.Text;
+            OrderId = i;
+            Categories = new List<string>();
+            foreach (SyndicationCategory cat in syndicationItem.Categories)
             {
-                this.Categories.Add(cat.Name);
+                Categories.Add(cat.Name);
             }
 
             return this;
@@ -47,27 +46,27 @@ namespace StackOverflowCareers.Model
 
         public JobPosting UpdateFromScreenScraper(HtmlDocument document)
         {
-            this.Title = document.GetText("class", "title");
-            this.Company = document.GetText("class", "employer");
-            this.JobLocation = document.GetText("class", "location");
-            this.CompanyWebsite = document.GetLink("class", "employer");
-            this.SpolskyTest.Clear();
+            Title = document.GetText("class", "title");
+            Company = document.GetText("class", "employer");
+            JobLocation = document.GetText("class", "location");
+            CompanyWebsite = document.GetLink("class", "employer");
+            SpolskyTest.Clear();
             foreach (var test in document.GetJoelTest("id", "joeltest"))
             {
-                this.SpolskyTest.Add(new JoelTestResult(test));
+                SpolskyTest.Add(new JoelTestResult(test));
             }
-            this.ApplyUrl = this.Id;
-            var jobInformation =
+            ApplyUrl = Id;
+            List<HtmlNode> jobInformation =
                 document.DocumentNode.Descendants()
                     .Where(node => node.GetAttributeValue("class", string.Empty).Contains("description")).ToList();
 
             //this is very hacky, but I am tired.
             //TODO: Figure out how to do this without relying on array index.
-            this.Summary = HttpUtility.HtmlDecode(jobInformation[0].InnerText.Replace("Job Description", "").Trim());
+            Summary = HttpUtility.HtmlDecode(jobInformation[0].InnerText.Replace("Job Description", "").Trim());
             if (jobInformation.Count > 1)
-                this.Qualifications = HttpUtility.HtmlDecode(jobInformation[1].InnerText.Trim());
+                Qualifications = HttpUtility.HtmlDecode(jobInformation[1].InnerText.Trim());
             if (jobInformation.Count > 2)
-                this.CompanyDescription = HttpUtility.HtmlDecode(jobInformation[2].InnerText.Trim());
+                CompanyDescription = HttpUtility.HtmlDecode(jobInformation[2].InnerText.Trim());
 
             return this;
         }
@@ -79,9 +78,9 @@ namespace StackOverflowCareers.Model
             {
                 if (value.Contains("<") && value.Contains(">"))
                 {
-                    var openGator = value.IndexOf('<');
-                    var closeGator = value.IndexOf('>');
-                    var countGator = (closeGator + 1) - openGator;
+                    int openGator = value.IndexOf('<');
+                    int closeGator = value.IndexOf('>');
+                    int countGator = (closeGator + 1) - openGator;
                     value = value.Remove(openGator, countGator);
                 }
                 else

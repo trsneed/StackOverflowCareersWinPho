@@ -7,31 +7,147 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.ServiceModel;
 using System.ServiceModel.Syndication;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Xml;
-using Microsoft.Phone.Tasks;
 using StackOverflowCareers.Core;
 using StackOverflowCareers.Model;
 using StackOverflowCareers.Model.Criteria;
-using StackOverflowCareers.Resources;
 
 namespace StackOverflowCareers.ViewModels
 {
     public class MainViewModel : BaseViewModel
     {
-        private LocationService _locationService;
         public const string SearchUrl = "http://careers.stackoverflow.com/jobs/feed?";
+        private readonly LocationService _locationService;
+        public int Offset;
+        private Visibility _AppBarVisibility;
+        private int _Distance = 10;
+        private bool _IsAboutOpen;
+        private bool _IsRelocation;
+        private bool _IsRemote;
+        private bool _IsSearchOpen;
+
+        /// <summary>
+        ///     A collection for ItemViewModel objects.
+        /// </summary>
+        private ObservableCollection<JobPosting> _JobPostings;
+
+        private bool _LocationServiceReady;
+        private string _WhatSearchText;
+        private string _WhereSearchText;
+        private string _searchResult;
 
         public MainViewModel()
         {
-            
             _locationService = new LocationService(new GeoCoordinateWatcher());
             _locationService.WatcherReadyEventHandler += WatcherReady;
             _locationService.LocationTextEventHandler += LocationTextEventHandler;
-            this.JobPostings = new ObservableCollection<JobPosting>();
+            JobPostings = new ObservableCollection<JobPosting>();
+        }
+
+        public ObservableCollection<JobPosting> JobPostings
+        {
+            get { return _JobPostings; }
+            set
+            {
+                _JobPostings = value;
+                OnPropertyChanged("JobPostings");
+            }
+        }
+
+        public bool IsDataLoaded { get; private set; }
+
+        public Visibility AppBarVisibility
+        {
+            get { return _AppBarVisibility; }
+            set
+            {
+                _AppBarVisibility = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool IsRemote
+        {
+            get { return _IsRemote; }
+            set
+            {
+                _IsRemote = value;
+                OnPropertyChanged("IsRemote");
+            }
+        }
+
+        public bool IsRelocation
+        {
+            get { return _IsRelocation; }
+            set
+            {
+                _IsRelocation = value;
+                OnPropertyChanged("IsRelocation");
+            }
+        }
+
+        public int Distance
+        {
+            get { return _Distance; }
+            set
+            {
+                _Distance = value;
+                OnPropertyChanged("Distance");
+            }
+        }
+
+        public bool IsSearchOpen
+        {
+            get { return _IsSearchOpen; }
+            set
+            {
+                _IsSearchOpen = value;
+
+                OnPropertyChanged("IsSearchOpen");
+            }
+        }
+
+        public bool IsAboutOpen
+        {
+            get { return _IsAboutOpen; }
+            set
+            {
+                _IsAboutOpen = value;
+                OnPropertyChanged("IsAboutOpen");
+            }
+        }
+
+        public bool LocationServiceReady
+        {
+            get { return _LocationServiceReady; }
+            set
+            {
+                _LocationServiceReady = value;
+                OnPropertyChanged("LocationServiceReady");
+            }
+        }
+
+        public string WhatSearchText
+        {
+            get { return _WhatSearchText; }
+            set
+            {
+                _WhatSearchText = value;
+                OnPropertyChanged("WhatSearchText");
+            }
+        }
+
+        public string WhereSearchText
+        {
+            get { return _WhereSearchText; }
+            set
+            {
+                _WhereSearchText = value;
+                OnPropertyChanged("WhereSearchText");
+            }
         }
 
         private void LocationTextEventHandler(object sender, string s)
@@ -44,143 +160,14 @@ namespace StackOverflowCareers.ViewModels
             LocationServiceReady = b;
         }
 
-        /// <summary>
-        /// A collection for ItemViewModel objects.
-        /// </summary>
-        private ObservableCollection<JobPosting> _JobPostings;
-
-        public ObservableCollection<JobPosting> JobPostings
-        {
-            get { return _JobPostings; }
-            set
-            {
-                _JobPostings = value;
-                OnPropertyChanged("JobPostings");
-            }
-        }
-
-        public bool IsDataLoaded
-        {
-            get;
-            private set;
-        }
-
-        private Visibility _AppBarVisibility;
-
-        public Visibility AppBarVisibility
-        {
-            get { return _AppBarVisibility; }
-            set
-            {
-                _AppBarVisibility = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private bool _IsRemote;
-
-        public bool IsRemote
-        {
-            get { return _IsRemote; }
-            set
-            {
-                _IsRemote = value;
-                OnPropertyChanged("IsRemote");
-            }
-        }
-
-        private bool _IsRelocation;
-
-        public bool IsRelocation
-        {
-            get { return _IsRelocation; }
-            set
-            {
-                _IsRelocation = value;
-                OnPropertyChanged("IsRelocation");
-            }
-        }
-
-        private int _Distance = 10;
-
-        public int Distance
-        {
-            get { return _Distance; }
-            set
-            {
-                _Distance = value;
-                OnPropertyChanged("Distance");
-            }
-        }
-
-        private bool _IsSearchOpen;
-
-        public bool IsSearchOpen
-        {
-            get { return _IsSearchOpen; }
-            set
-            {
-                _IsSearchOpen = value;
-               
-                OnPropertyChanged("IsSearchOpen");
-            }
-        }
-
-        private bool _IsAboutOpen;
-
-        public bool IsAboutOpen
-        {
-            get { return _IsAboutOpen; }
-            set
-            {
-                _IsAboutOpen = value;
-                OnPropertyChanged("IsAboutOpen");
-            }
-        }
-
-        private bool _LocationServiceReady;
-        public bool LocationServiceReady
-        {
-            get { return _LocationServiceReady; }
-            set
-            {
-                _LocationServiceReady = value;
-                OnPropertyChanged("LocationServiceReady");
-            }
-        }
-
-        private string _WhatSearchText;
-        public string WhatSearchText
-        {
-            get { return _WhatSearchText; }
-            set
-            {
-                _WhatSearchText = value;
-                OnPropertyChanged("WhatSearchText");
-            }
-        }
-
-        private string _WhereSearchText;
-        public string WhereSearchText
-        {
-            get { return _WhereSearchText; }
-            set
-            {
-                _WhereSearchText = value;
-                OnPropertyChanged("WhereSearchText");
-            }
-        }
-
-        
 
         public event PropertyChangedEventHandler PropertyChanged;
 
 
         private void UpdateFeedList(string feedXML)
         {
-
             // Load the feed into a SyndicationFeed instance.
-            StringReader stringReader = new StringReader(feedXML);
+            var stringReader = new StringReader(feedXML);
             XmlReader xmlReader = XmlReader.Create(stringReader);
             SyndicationFeed feed = SyndicationFeed.Load(xmlReader);
 
@@ -193,19 +180,18 @@ namespace StackOverflowCareers.ViewModels
                 AddToJobPostings(feed.Items.ToList().GetRange(Offset, Offset + itemOffsetInt));
             }
             Offset = JobPostings.Count();
-
         }
 
         private void AddToJobPostings(IEnumerable<SyndicationItem> items)
         {
             int i = Offset;
-            foreach (var syndicationItem in items)
+            foreach (SyndicationItem syndicationItem in items)
             {
-                JobPostings.Add(new JobPosting().UpdatePostingFromRss(syndicationItem,i));
+                JobPostings.Add(new JobPosting().UpdatePostingFromRss(syndicationItem, i));
                 i++;
             }
         }
-        
+
 
         public async Task SearchCareers(SearchCriteria criteria = null)
         {
@@ -213,7 +199,7 @@ namespace StackOverflowCareers.ViewModels
             LoadingText = "Searching Careers";
             JobPostings.Clear();
             Offset = 0;
-            var url = SearchUrl;
+            string url = SearchUrl;
             if (criteria != null)
             {
                 string criteriaString = criteria.Criteria.Aggregate("",
@@ -222,13 +208,13 @@ namespace StackOverflowCareers.ViewModels
                 url = string.Format("{0}{1}", url, criteriaString);
             }
 
-            var request = HttpWebRequest.Create(new Uri(url)) as HttpWebRequest;
+            var request = WebRequest.Create(new Uri(url)) as HttpWebRequest;
             try
             {
-                var response = (HttpWebResponse) await request.GetResponseAsync();
+                HttpWebResponse response = await request.GetResponseAsync();
                 // Read the response into a Stream object.
-                System.IO.Stream responseStream = response.GetResponseStream();
-                using (var reader = new System.IO.StreamReader(responseStream))
+                Stream responseStream = response.GetResponseStream();
+                using (var reader = new StreamReader(responseStream))
                 {
                     _searchResult = reader.ReadToEnd();
                 }
@@ -245,7 +231,6 @@ namespace StackOverflowCareers.ViewModels
             IsDataLoaded = true;
         }
 
-       
 
         public SearchCriteria BuildCriteria()
         {
@@ -280,8 +265,6 @@ namespace StackOverflowCareers.ViewModels
             LoadingText = "Getting Location";
             try
             {
-
-
                 if (_LocationServiceReady)
                 {
                     await _locationService.LocateThePhone();
@@ -300,17 +283,17 @@ namespace StackOverflowCareers.ViewModels
 
         internal void RoundDistance(double sliderValue)
         {
-            Distance = Convert.ToInt32(Math.Round((sliderValue / 10.0)) * 10);
+            Distance = Convert.ToInt32(Math.Round((sliderValue/10.0))*10);
         }
 
         internal async Task LoadCareersOffsetAsync()
         {
-            this.IsLoading = true;
-            this.LoadingText = "updating careers list";
+            IsLoading = true;
+            LoadingText = "updating careers list";
             try
             {
                 await Task.Yield();
-                this.UpdateFeedList(_searchResult);
+                UpdateFeedList(_searchResult);
             }
             catch (Exception e)
             {
@@ -320,12 +303,8 @@ namespace StackOverflowCareers.ViewModels
             }
             finally
             {
-                this.IsLoading = false;
+                IsLoading = false;
             }
-            
         }
-
-        public int Offset;
-        private string _searchResult;
     }
 }

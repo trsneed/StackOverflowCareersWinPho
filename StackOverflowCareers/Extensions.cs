@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net;
-using System.Text;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
 
@@ -18,13 +16,13 @@ namespace StackOverflowCareers
             {
                 try
                 {
-                    HttpWebRequest responseRequest = (HttpWebRequest)asyncResponse.AsyncState;
-                    HttpWebResponse someResponse = (HttpWebResponse)responseRequest.EndGetResponse(asyncResponse);
+                    var responseRequest = (HttpWebRequest) asyncResponse.AsyncState;
+                    var someResponse = (HttpWebResponse) responseRequest.EndGetResponse(asyncResponse);
                     taskComplete.TrySetResult(someResponse);
                 }
                 catch (WebException webExc)
                 {
-                    HttpWebResponse failedResponse = (HttpWebResponse)webExc.Response;
+                    var failedResponse = (HttpWebResponse) webExc.Response;
                     taskComplete.TrySetResult(failedResponse);
                 }
             }, request);
@@ -40,7 +38,7 @@ namespace StackOverflowCareers
         {
             if (document != null)
             {
-                var firstOrDefault = document.GetHtmlNode(elementType, className);
+                HtmlNode firstOrDefault = document.GetHtmlNode(elementType, className);
 
                 if (firstOrDefault != null)
                     return firstOrDefault.InnerText.Trim();
@@ -52,7 +50,7 @@ namespace StackOverflowCareers
         {
             if (document != null)
             {
-                var firstOrDefault = document.GetHtmlNode(elementType, className);
+                HtmlNode firstOrDefault = document.GetHtmlNode(elementType, className);
                 if (firstOrDefault != null)
                 {
                     return firstOrDefault.Attributes["href"].Value;
@@ -63,8 +61,8 @@ namespace StackOverflowCareers
 
         private static HtmlNode GetHtmlNode(this HtmlDocument document, string elementType, string className)
         {
-            return  document.DocumentNode.Descendants()
-                    .FirstOrDefault(node => node.GetAttributeValue(elementType, string.Empty).Contains(className));
+            return document.DocumentNode.Descendants()
+                .FirstOrDefault(node => node.GetAttributeValue(elementType, string.Empty).Contains(className));
         }
 
         public static IEnumerable<KeyValuePair<string, bool>> GetJoelTest(this HtmlDocument document, string elementType,
@@ -73,7 +71,7 @@ namespace StackOverflowCareers
             var joelList = new List<KeyValuePair<string, bool>>();
             if (document != null)
             {
-                var node = document.GetHtmlNode(elementType, className);
+                HtmlNode node = document.GetHtmlNode(elementType, className);
                 if (node != null)
                     joelList.AddRange(
                         node.Descendants()

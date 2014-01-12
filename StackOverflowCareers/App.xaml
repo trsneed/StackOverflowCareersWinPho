@@ -8,20 +8,20 @@
 
     <!--Application Resources-->
     <Application.Resources>
-        <local:LocalizedStrings xmlns:local="clr-namespace:StackOverflowCareers" x:Key="LocalizedStrings"/>
-        <Style  x:Name="WrappedTextStyle" BasedOn="{StaticResource PhoneTextBlockBase}" TargetType="TextBlock">
-            <Setter Property="TextWrapping" Value="Wrap"/>
+        <local:LocalizedStrings xmlns:local="clr-namespace:StackOverflowCareers" x:Key="LocalizedStrings" />
+        <Style x:Name="WrappedTextStyle" BasedOn="{StaticResource PhoneTextBlockBase}" TargetType="TextBlock">
+            <Setter Property="TextWrapping" Value="Wrap" />
         </Style>
         <FontFamily x:Key="FontAwesome">/Library/fontawesome-webfont.ttf#FontAwesome</FontFamily>
-        
-        <stackOverflowCareers:BoolToTextConverter x:Key="BoolToTextConverter"/>
+
+        <stackOverflowCareers:BoolToTextConverter x:Key="BoolToTextConverter" />
     </Application.Resources>
 
     <Application.ApplicationLifetimeObjects>
         <!--Required object that handles lifetime events for the application-->
         <shell:PhoneApplicationService
             Launching="Application_Launching" Closing="Application_Closing"
-            Activated="Application_Activated" Deactivated="Application_Deactivated"/>
+            Activated="Application_Activated" Deactivated="Application_Deactivated" />
     </Application.ApplicationLifetimeObjects>
 
 </Application>

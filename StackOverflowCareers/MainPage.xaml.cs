@@ -1,39 +1,31 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics;
-using System.Linq;
-using System.Net;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using StackOverflowCareers.Model;
-using StackOverflowCareers.Resources;
 using StackOverflowCareers.ViewModels;
 
 namespace StackOverflowCareers
 {
     public partial class MainPage : PhoneApplicationPage
     {
+        private readonly MainViewModel _mainViewModel;
+        private int _offsetKnob = 5;
         private ProgressIndicator indicator;
-        private MainViewModel _mainViewModel;
-        int _offsetKnob = 5;
 
         // Constructor
         public MainPage()
         {
-
             DataContext = _mainViewModel = App.ViewModel;
             Indicators.SetIndicators(this, _mainViewModel);
             InitializeComponent();
-
         }
 
         // Load data for the ViewModel Items
-        protected async override void OnNavigatedTo(NavigationEventArgs e)
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             if (!App.ViewModel.IsDataLoaded)
             {
@@ -62,12 +54,9 @@ namespace StackOverflowCareers
 
         private void SearchClicked(object sender, EventArgs e)
         {
-
             SearchControl.Height = Application.Current.Host.Content.ActualHeight;
             SearchControl.Width = Application.Current.Host.Content.ActualWidth;
             _mainViewModel.IsSearchOpen = true;
-
-
         }
 
         private async void main_Reailized(object sender, ItemRealizationEventArgs e)

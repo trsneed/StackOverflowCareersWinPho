@@ -1,13 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Navigation;
+﻿using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
-using Microsoft.Phone.Shell;
-using StackOverflowCareers.Resources;
 using StackOverflowCareers.ViewModels;
 
 namespace StackOverflowCareers
@@ -15,13 +7,12 @@ namespace StackOverflowCareers
     public partial class DetailsPage : PhoneApplicationPage
     {
         private JobPostingViewModel _vm;
-       
-       
+
+
         // Constructor
         public DetailsPage()
         {
             InitializeComponent();
-            
         }
 
         // When page is navigated to set data context to view modell from selected item in list
@@ -29,7 +20,6 @@ namespace StackOverflowCareers
         {
             if (DataContext == null)
             {
-
                 string selectedIndex = "";
                 if (NavigationContext.QueryString.TryGetValue("selectedItem", out selectedIndex))
                 {
@@ -40,6 +30,5 @@ namespace StackOverflowCareers
                 }
             }
         }
-
     }
 }
