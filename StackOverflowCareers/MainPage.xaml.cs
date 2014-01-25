@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
@@ -22,6 +23,15 @@ namespace StackOverflowCareers
             DataContext = _mainViewModel = App.ViewModel;
             Indicators.SetIndicators(this, _mainViewModel);
             InitializeComponent();
+            this.BackKeyPress+= (sender, args) =>
+            {
+                if (_mainViewModel.IsSearchOpen || _mainViewModel.IsAboutOpen)
+                {
+                    _mainViewModel.IsSearchOpen = false;
+                    _mainViewModel.IsAboutOpen = false;
+                    args.Cancel = true;
+                }
+            };
         }
 
         // Load data for the ViewModel Items
@@ -77,11 +87,17 @@ namespace StackOverflowCareers
                 }
             }
         }
+        protected override void OnBackKeyPress(System.ComponentModel.CancelEventArgs e)
+        {
+            //Do your work here
+            base.OnBackKeyPress(e);
+        }
 
         private void AboutClicked(object sender, EventArgs e)
         {
             AboutControl.Height = Application.Current.Host.Content.ActualHeight;
             AboutControl.Width = Application.Current.Host.Content.ActualWidth;
+            
             _mainViewModel.IsAboutOpen = true;
         }
     }
